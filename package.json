@@ -1,0 +1,21 @@
+{
+  "name": "backendtif",
+  "version": "1.0.0",
+  "description": "Primera version del proyecto integrador final",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Macmer88/backendTIF.git"
+  },
+  "author": "Maxi Merele",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Macmer88/backendTIF/issues"
+  },
+  "homepage": "https://github.com/Macmer88/backendTIF#readme",
+  "type": "module"
+}
