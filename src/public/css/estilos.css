@@ -1,0 +1,21 @@
+#logo{
+    max-width: 100px;
+    min-width: 80px;
+}
+
+header, #color_fondo_inicio {
+    background-color: rgb(193, 193, 248);
+}
+
+header ul li a:hover {
+    background-color: rgb(166, 166, 197);
+    transform: scale(1.05);
+}
+
+#inicio{
+    background-image: url(../img/imagen_fondo_inicio.jpg);
+    background-color: rgba(193, 193, 248, 0.4);
+    background-blend-mode: overlay;
+    background-size: cover;
+    min-height: 600px;
+}

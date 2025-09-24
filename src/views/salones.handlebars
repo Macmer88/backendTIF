@@ -1,0 +1,9 @@
+<h2>Lista de Salones</h2>
+
+<ul>
+    {{#each salones}}
+    <li>
+        ID:{{salon_id}}-{{titulo}} - Dirección: {{direccion}} Capacidad: {{capacidad}} - Precio: ${{importe}}
+    </li>
+    {{/each}}
+</ul>
