@@ -9,6 +9,7 @@
     "color-convert": "^2.0.1",
     "color-name": "^1.1.4",
     "cross-spawn": "^7.0.6",
+    "dotenv": "^17.2.2",
     "eastasianwidth": "^0.2.0",
     "emoji-regex": "^9.2.2",
     "express-handlebars": "^8.0.3",
