@@ -1,4 +1,4 @@
-import { fetchSalones } from '../services/servicio_salones.js';
+import { fetchSalones } from '../../services/servicio_salones.js';
 
 export async function renderSalonesView(req, res) {
     try {
