@@ -1,7 +1,7 @@
 import express from 'express';
 import setupHandlebars from './src/config/handlebars.js';
-import routerv1 from './src/routes/ver2/routes_salon.js';
-import routerv2 from './src/routes/ver1/routes_salonv1.js';
+import routerv1 from './src/routes/ver1/routes_salonv1.js';
+import routerv2 from './src/routes/ver2/routes_salon.js';
 
 const app = express();
 const port = 3000;
