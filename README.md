@@ -32,3 +32,5 @@ DB_HOST=localhost
 DB_USER=maxi_salones
 DB_PASS=Tudw_2025!
 DB_NAME=salonesBD
+
+#probando si la rama se blindó crrectamente#
