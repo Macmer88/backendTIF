@@ -19,5 +19,5 @@ export async function fetchSalonById(id){
             estado: 'inactivo'
         };
     }
-    return salon;
+    return {mensaje: 'Salón activo', salon};
 }
