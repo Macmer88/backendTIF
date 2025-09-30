@@ -33,4 +33,50 @@ DB_USER=maxi_salones
 DB_PASS=Tudw_2025!
 DB_NAME=salonesBD
 
-#probando si la rama se blindó crrectamente#
+#Metodos y consultas creados. Ejemplos y respuestas esperadas.
+
+inactivos: si está presente, devuelve salones con activo = 0. Si no se incluye, devuelve los activos (activo = 1).
+
+page: número de página para paginación. Por defecto: 1.
+
+limit: cantidad de resultados por página. Por defecto: 10.
+
+ordenar: campo por el cual ordenar los resultados. Valores válidos: titulo, importe, capacidad, salon_id.
+
+desc: si está presente, ordena en forma descendente.
+
+Obtener todos los salones activos
+GET /salones
+
+Obtener salones inactivos
+GET /salones?inactivos
+
+Paginación
+GET /salones?page=2&limit=5
+
+Ordenar por título ascendente
+GET /salones?ordenar=titulo
+
+Ordenar por capacidad descendente
+GET /salones?ordenar=capacidad&desc
+
+Ordenar por ID descendente
+GET /salones?ordenar=salon_id&desc
+
+Combinación de filtros
+GET /salones?inactivos&page=1&limit=10&ordenar=importe&desc
+
+Metodo GET por ID:
+GET /salones/:id
+Si no existe el ID, devuelve mensaje de error.
+Si existe, devuelve el salon correspondiente con un mensaje (activo, o inactivo)
+
+Metodo PUT/salones7:id
+Edita los siguientes campos:
+{
+  "titulo": "Sala Norte",
+  "direccion": "Planta Alta",
+  "capacidad": 40,
+  "importe": 1500,
+  "activo": 1
+}
