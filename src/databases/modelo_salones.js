@@ -22,7 +22,7 @@ export async function salonesPorId(id){
     return rows[0];
 }
 
-export async function updateSalon(id, { titulo, direccion, capacidad, activo, importe }) {
+/*export async function updateSalon(id, { titulo, direccion, capacidad, activo, importe }) {
     if (
         titulo === undefined ||
         direccion === undefined ||
@@ -36,5 +36,14 @@ export async function updateSalon(id, { titulo, direccion, capacidad, activo, im
     await pool.query(
         'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ?, activo = ?, modificado = CURRENT_TIMESTAMP WHERE salon_id = ?',
         [titulo, direccion, capacidad, importe, parseInt(activo), id]
+    );
+}*/
+
+export async function updateSalon(id, datos) {
+    const { titulo, direccion, capacidad, activo, importe } = datos;
+
+    await pool.query(
+        'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ?, activo = ?, modificado = CURRENT_TIMESTAMP WHERE salon_id = ?',
+        [titulo, direccion, capacidad, importe, activo, id]
     );
 }
