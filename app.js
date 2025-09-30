@@ -16,8 +16,6 @@ app.use('/api/ver1/salones', routerv1);
 app.use('/api/ver2/salones', routerv2);
 
 
-
-
 app.listen(port, () => {
     console.log(`escuchando en http://localhost:${port}`);
 });
