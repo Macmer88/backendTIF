@@ -1,4 +1,4 @@
-import { salonesConFiltro} from '../databases/modelo_salones.js';
+import { salonesConFiltro, updateSalon } from '../databases/modelo_salones.js';
 import { salonesPorId } from '../databases/modelo_salones.js';
 
 
@@ -20,4 +20,8 @@ export async function fetchSalonById(id){
         };
     }
     return salon;
+}
+
+export async function modificarSalon(id, datos) {
+    await updateSalon(id, datos);
 }

@@ -1,4 +1,4 @@
-import { fetchSalones } from '../../services/servicio_salones.js';
+import { fetchSalones, modificarSalon } from '../../services/servicio_salones.js';
 import { fetchSalonById } from '../../services/servicio_salones.js';
 /*export async function renderSalonesJson(req, res) {
     try {
@@ -59,5 +59,15 @@ export async function mostrarSalonPorId(req, res) {
         res.json(salon);
     } catch (error) {
         res.status(404).json({ error: error.message });
+    }
+}
+
+export async function updateSalon(req, res) {
+    try {
+        await modificarSalon(req.params.id, req.body);
+        res.json({ message: 'Salón actualizado' });
+    } catch (err) {
+        console.error("Error en updateSalon:", err.message);
+        res.status(500).json({ error: 'Error al actualizar' });
     }
 }
