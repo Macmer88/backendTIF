@@ -1,4 +1,4 @@
-import { fetchSalones, modificarSalon } from '../../services/servicio_salones.js';
+import { fetchSalones, modificarSalon, eliminarSalon, reactivarSalon } from '../../services/servicio_salones.js';
 import { fetchSalonById } from '../../services/servicio_salones.js';
 /*export async function renderSalonesJson(req, res) {
     try {
@@ -70,4 +70,24 @@ export async function updateSalon(req, res) {
         console.error("Error en updateSalon:", err.message);
         res.status(500).json({ error: 'Error al actualizar' });
     }
+}
+
+export async function borrarSalon(req, res){
+    try{
+        await eliminarSalon(req.params.id);
+        res.json({mensaje: 'Salón eliminado'});
+    }catch(err){
+        console.error("Error en borrarSalon:", err.message);
+        res.status(500).json({error: 'Error al eliminar'});
+    };
+}
+
+export async function volverSalonActivo(req, res){
+    try{
+        await reactivarSalon(req.params.id);
+        res.json({mensaje: 'Salón reactivado'});
+    }catch(err){
+        console.error("Error en reactivarSalon:", err.message);
+        res.status(500).json({error: 'Error al reactivar'});
+    };
 }
