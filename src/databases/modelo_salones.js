@@ -40,3 +40,18 @@ export async function deleteSalon(id){
 export async function reactivateSalon(id){
     await pool.query('UPDATE salones SET activo = 1 WHERE salon_id=?', [id]);
 }
+
+
+export async function buscarUltId() {
+    const [rows] = await pool.query('SELECT salon_id FROM salones ORDER BY salon_id DESC LIMIT 1');
+    return rows[0]?.salon_id || 0;
+}
+
+export async function createSalon(datos) {
+    const { salon_id, titulo, direccion, capacidad, importe } = datos;
+    await pool.query(
+        'INSERT INTO salones (salon_id, titulo, direccion, capacidad, importe) VALUES (?, ?, ?, ?, ?)',
+        [salon_id, titulo, direccion, capacidad, importe]
+    );
+}
+
