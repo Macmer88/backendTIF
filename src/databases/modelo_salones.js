@@ -22,22 +22,6 @@ export async function salonesPorId(id){
     return rows[0];
 }
 
-/*export async function updateSalon(id, { titulo, direccion, capacidad, activo, importe }) {
-    if (
-        titulo === undefined ||
-        direccion === undefined ||
-        capacidad === undefined ||
-        activo === undefined ||
-        importe === undefined
-    ) {
-        throw new Error("Faltan campos obligatorios para actualizar");
-    }
-
-    await pool.query(
-        'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ?, activo = ?, modificado = CURRENT_TIMESTAMP WHERE salon_id = ?',
-        [titulo, direccion, capacidad, importe, parseInt(activo), id]
-    );
-}*/
 
 export async function updateSalon(id, datos) {
     const { titulo, direccion, capacidad, activo, importe } = datos;
@@ -46,4 +30,13 @@ export async function updateSalon(id, datos) {
         'UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ?, activo = ?, modificado = CURRENT_TIMESTAMP WHERE salon_id = ?',
         [titulo, direccion, capacidad, importe, activo, id]
     );
+}
+
+
+export async function deleteSalon(id){
+    await pool.query('UPDATE salones SET activo = 0 WHERE salon_id=?', [id]);
+} 
+
+export async function reactivateSalon(id){
+    await pool.query('UPDATE salones SET activo = 1 WHERE salon_id=?', [id]);
 }

@@ -1,4 +1,4 @@
-import { salonesConFiltro, updateSalon } from '../databases/modelo_salones.js';
+import { salonesConFiltro, updateSalon, deleteSalon, reactivateSalon } from '../databases/modelo_salones.js';
 import { salonesPorId } from '../databases/modelo_salones.js';
 
 
@@ -43,3 +43,28 @@ export async function modificarSalon(id, datos) {
     await updateSalon(id, { titulo, direccion, capacidad, activo: activoInt, importe });
 }
 
+export async function eliminarSalon(id) {
+    const estadoSalon = await salonesPorId(id);
+    console.log('estadoSalon:', estadoSalon);
+    if (!estadoSalon) {
+        throw new Error('El salón no existe');
+    }
+
+    if (estadoSalon.activo === 0) {
+        throw new Error('El salón ya está inactivo');
+    }
+    await deleteSalon(id);
+    return { mensaje: 'Salón eliminado' };
+}
+
+export async function reactivarSalon(id) {
+    const estadoSalon = await salonesPorId(id);
+    if (!estadoSalon) {
+        throw new Error('El salón no existe');
+    }
+    if (estadoSalon.activo === 1) {
+        throw new Error('El salón ya está activo');
+    }
+    await reactivateSalon(id);
+    return { mensaje: 'EL salón fue reactivado con éxito' };
+}
