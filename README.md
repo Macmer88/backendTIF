@@ -71,7 +71,7 @@ GET /salones/:id
 Si no existe el ID, devuelve mensaje de error.
 Si existe, devuelve el salon correspondiente con un mensaje (activo, o inactivo)
 
-Metodo PUT/salones7:id
+Metodo PUT/salones/:id
 Edita los siguientes campos:
 {
   "titulo": "Sala Norte",
@@ -80,3 +80,15 @@ Edita los siguientes campos:
   "importe": 1500,
   "activo": 1
 }
+
+Metodo DELETE salones/:id
+cambia el estado de un salon a inactivo. De esta manera, el get salones no lo lista a menos que lo pidamos (solo lista activos por defecto).
+La funcion valida que el id ingresado se encuentre activo.
+
+Metodo PATCH salones/:id/reactivar
+verifica que el salon con id ingresado en la consulta se encuentre inactivo y lo reactiva.
+
+Metodo POST salones/crear
+toma la siguiente informacion/estructura para crear un objeto nuevo:
+{ titulo, direccion, capacidad, importe }
+Asigna el id de manera automatica, tomando el ultimo id listado y le suma uno, para evitar que se repitan las claves.
