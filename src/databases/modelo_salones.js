@@ -55,3 +55,7 @@ export async function createSalon(datos) {
     );
 }
 
+export async function buscarPorTitulo(nombre_salon){
+    const [rows] = await pool.query('SELECT * FROM salones WHERE titulo = ? LIMIT 1', [nombre_salon]);
+    return rows[0];
+}

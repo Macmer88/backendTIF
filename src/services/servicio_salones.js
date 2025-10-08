@@ -1,5 +1,5 @@
-import { salonesConFiltro, updateSalon, deleteSalon, reactivateSalon, createSalon, buscarUltId } from '../databases/modelo_salones.js';
-import { salonesPorId } from '../databases/modelo_salones.js';
+import { salonesConFiltro, updateSalon, deleteSalon, reactivateSalon, createSalon, buscarUltId, buscarPorTitulo } from '../databases/modelo_salones.js';
+import { salonesPorId} from '../databases/modelo_salones.js';
 
 
 export async function fetchSalones(activo,ordenar,desc,limit,offset) {
@@ -83,5 +83,10 @@ export async function crearSalon(datos) {
     await createSalon({ salon_id: nuevoId, titulo, direccion, capacidad, importe });
 
     return { mensaje: 'Salón creado con éxito', salon_id: nuevoId };
+}
+
+
+export async function obtenerSalonPorTitulo(titulo) {
+    return await buscarPorTitulo(titulo);
 }
 
