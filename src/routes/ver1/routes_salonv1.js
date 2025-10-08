@@ -1,6 +1,7 @@
 import express from 'express';
 import { mostrarSalones } from '../../controllers/ver1/controller_salonesv1.js';
 import { mostrarSalonPorId, updateSalon, borrarSalon, volverSalonActivo, nuevoSalon } from '../../controllers/ver1/controller_salonesv1.js';
+import { validarSalones, validarIdSalon, verificarSalonExistente } from '../../midlewares/validators/salonesValidators.js';
 
 const routerv1 = express.Router();
 
@@ -70,7 +71,7 @@ routerv1.get('/', mostrarSalones);
  *         description: Error del servidor
  */
 
-routerv1.get('/:id', mostrarSalonPorId);
+routerv1.get('/:id', validarIdSalon,mostrarSalonPorId);
 
 /**
  * @swagger
@@ -109,11 +110,13 @@ routerv1.get('/:id', mostrarSalonPorId);
  *         description: Datos inválidos
  *       404:
  *         description: Salón no encontrado
+ *       409:
+ *         description: Ya existe un salón activo con ese título
  *       500:
  *         description: Error del servidor
  */
 
-routerv1.put('/:id', updateSalon);
+routerv1.put('/:id', validarIdSalon,validarSalones, verificarSalonExistente, updateSalon);
 
 /**
  * @swagger
@@ -137,7 +140,7 @@ routerv1.put('/:id', updateSalon);
  *         description: Error del servidor
  */
 
-routerv1.delete('/:id', borrarSalon);
+routerv1.delete('/:id', validarIdSalon,borrarSalon);
 
 /**
  * @swagger
@@ -161,7 +164,7 @@ routerv1.delete('/:id', borrarSalon);
  *         description: Error del servidor
  */
 
-routerv1.patch('/:id/reactivar', volverSalonActivo);
+routerv1.patch('/:id/reactivar', validarIdSalon, verificarSalonExistente, volverSalonActivo);
 
 /**
  * @swagger
@@ -194,10 +197,12 @@ routerv1.patch('/:id/reactivar', volverSalonActivo);
  *         description: Salón creado correctamente
  *       400:
  *         description: Datos inválidos
+ *       409:
+ *         description: Ya existe un salón activo con ese título
  *       500:
  *         description: Error del servidor
  */
 
-routerv1.post('/crear', nuevoSalon);
+routerv1.post('/crear', validarSalones, verificarSalonExistente, nuevoSalon);
 
 export default routerv1;
