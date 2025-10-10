@@ -3,7 +3,7 @@ import { mostrarSalones } from '../../controllers/ver1/controller_salonesv1.js';
 import { mostrarSalonPorId, updateSalon, borrarSalon, volverSalonActivo, nuevoSalon } from '../../controllers/ver1/controller_salonesv1.js';
 import { validarSalones, validarIdSalon, verificarSalonExistente } from '../../midlewares/validators/salonesValidators.js';
 
-const routerv1 = express.Router();
+const routerv1salones = express.Router();
 
 /**
  * @swagger
@@ -47,7 +47,7 @@ const routerv1 = express.Router();
  */
 
 
-routerv1.get('/', mostrarSalones);
+routerv1salones.get('/', mostrarSalones);
 
 /**
  * @swagger
@@ -71,7 +71,7 @@ routerv1.get('/', mostrarSalones);
  *         description: Error del servidor
  */
 
-routerv1.get('/:id', validarIdSalon,mostrarSalonPorId);
+routerv1salones.get('/:id', validarIdSalon,mostrarSalonPorId);
 
 /**
  * @swagger
@@ -116,7 +116,7 @@ routerv1.get('/:id', validarIdSalon,mostrarSalonPorId);
  *         description: Error del servidor
  */
 
-routerv1.put('/:id', validarIdSalon,validarSalones, verificarSalonExistente, updateSalon);
+routerv1salones.put('/:id', validarIdSalon,validarSalones, verificarSalonExistente, updateSalon);
 
 /**
  * @swagger
@@ -140,7 +140,7 @@ routerv1.put('/:id', validarIdSalon,validarSalones, verificarSalonExistente, upd
  *         description: Error del servidor
  */
 
-routerv1.delete('/:id', validarIdSalon,borrarSalon);
+routerv1salones.delete('/:id', validarIdSalon,borrarSalon);
 
 /**
  * @swagger
@@ -164,7 +164,7 @@ routerv1.delete('/:id', validarIdSalon,borrarSalon);
  *         description: Error del servidor
  */
 
-routerv1.patch('/:id/reactivar', validarIdSalon, verificarSalonExistente, volverSalonActivo);
+routerv1salones.patch('/:id/reactivar', validarIdSalon, verificarSalonExistente, volverSalonActivo);
 
 /**
  * @swagger
@@ -203,6 +203,6 @@ routerv1.patch('/:id/reactivar', validarIdSalon, verificarSalonExistente, volver
  *         description: Error del servidor
  */
 
-routerv1.post('/crear', validarSalones, verificarSalonExistente, nuevoSalon);
+routerv1salones.post('/crear', validarSalones, verificarSalonExistente, nuevoSalon);
 
-export default routerv1;
+export default routerv1salones;

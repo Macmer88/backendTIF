@@ -22,10 +22,6 @@ export async function fetchSalonById(id){
     return {mensaje: 'Salón activo', salon};
 }
 
-/*export async function modificarSalon(id, datos) {
-    await updateSalon(id, datos);
-}*/
-
 export async function modificarSalon(id, datos) {
     const { titulo, direccion, capacidad, activo, importe } = datos;
 

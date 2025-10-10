@@ -1,0 +1,82 @@
+import * as servicioReservas from '../../services/servicio_reservas.js';
+
+export async function mostrarReservas(req, res) {
+    const {
+        inactivos,
+        page = 1,
+        limit = 10,
+        ordenar,
+        desc
+    } = req.query;
+
+    const estado = inactivos !== undefined ? 0 : 1;
+    const offset = (page - 1) * limit;
+    const esDesc = desc !== undefined;
+
+    try {
+        const reservas = await servicioReservas.fetchReservas(
+            estado,
+            ordenar,
+            esDesc,
+            parseInt(limit),
+            offset
+        );
+        res.json(reservas);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener reservas' });
+    }
+}
+
+export async function mostrarReservasPorId(req, res) {
+    const { id } = req.params;
+    
+    try {
+        const reservas = await servicioReservas.reservasById(id);
+        res.json(reservas);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}
+
+export async function updateReserva(req, res) {
+    try {
+        console.log("ID:", req.params.id);
+        console.log("Body:", req.body);
+
+        await servicioReservas.modificarReserva(req.params.id, req.body);
+        res.json({ message: 'Reserva actualizada' });
+    } catch (err) {
+        console.error("Error en updateReserva:", err.message);
+        res.status(500).json({ error: 'Error al actualizar' });
+    }
+}
+
+export async function borrarReserva(req, res){
+    try{
+        await servicioReservas.eliminarReserva(req.params.id);
+        res.json({mensaje: 'Reserva eliminada'});
+    }catch(err){
+        console.error("Error en borrarReserva:", err.message);
+        res.status(500).json({error: 'Error al eliminar'});
+    };
+}
+
+export async function volverReservaActiva(req, res){
+    try{
+        const resultado = await servicioReservas.reactivarReserva(req.params.id);
+        res.status(201).json(resultado);
+    }catch(err){
+        console.error("Error en reactivarReserva:", err.message);
+        res.status(500).json({error: 'Error al reactivar'});
+    };
+}
+
+export async function nuevaReserva(req, res){
+    try{
+        const resultado = await servicioReservas.crearReserva(req.body);
+        res.status(201).json(resultado);
+    }catch(err){
+        console.error("Error en crearReserva:", err.message);
+        res.status(500).json({error: 'Error al crear'});
+    }
+}
