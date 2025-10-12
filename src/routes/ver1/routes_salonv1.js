@@ -1,8 +1,8 @@
 import express from 'express';
 import { mostrarSalones } from '../../controllers/ver1/controller_salonesv1.js';
 import { mostrarSalonPorId, updateSalon, borrarSalon, volverSalonActivo, nuevoSalon } from '../../controllers/ver1/controller_salonesv1.js';
-import { validarSalones, validarIdSalon, verificarSalonExistente } from '../../midlewares/validators/salonesValidators.js';
-
+import { validarSalones, validarIdSalon } from '../../midlewares/validators/salonesValidators.js';
+import { verificarSalonExistente } from '../../midlewares/specifics/midlewareSalones.js';
 const routerv1salones = express.Router();
 
 /**
