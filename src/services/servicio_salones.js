@@ -1,4 +1,4 @@
-import { salonesConFiltro, updateSalon, deleteSalon, reactivateSalon, createSalon, buscarUltId, buscarPorTitulo } from '../databases/modelo_salones.js';
+import { salonesConFiltro, updateSalon, deleteSalon, reactivateSalon, createSalon, buscarUltId, buscarPorTitulo, buscarPorDireccion } from '../databases/modelo_salones.js';
 import { salonesPorId} from '../databases/modelo_salones.js';
 
 
@@ -84,5 +84,9 @@ export async function crearSalon(datos) {
 
 export async function obtenerSalonPorTitulo(titulo) {
     return await buscarPorTitulo(titulo);
+}
+
+export async function obtenerSalonPorDireccion(direccion) {
+    return await buscarPorDireccion(direccion);
 }
 
