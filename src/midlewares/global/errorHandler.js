@@ -33,6 +33,13 @@ const errorHandler = (err, req, res, next) => {
         });
     }
 
+    // Manejo de errores personalizados con statusCode
+    if (err.statusCode) {
+        return res.status(err.statusCode).json({
+            error: err.message,
+        });
+    }
+
     // Manejo genérico para cualquier otro error
     res.status(500).json({
         error: 'Error interno del servidor',
