@@ -116,7 +116,7 @@ routerv1salones.get('/:id', validarIdSalon,mostrarSalonPorId);
  *         description: Error del servidor
  */
 
-routerv1salones.put('/:id', validarIdSalon,validarSalones, verificarSalonExistente, updateSalon);
+routerv1salones.put('/:id', validarIdSalon,validarSalones, updateSalon);
 
 /**
  * @swagger
