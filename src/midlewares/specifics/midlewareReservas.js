@@ -29,15 +29,21 @@ export async function validarExtension(req, res, next) {
 };
 
 export async function validarAnticipacion(req, res, next) {
-    const { fecha_reserva } = req.body;
-    const antelacion = new Date();
-    antelacion.setHours(antelacion.getHours() + 48);
     try {
-        if (new Date(fecha_reserva) < antelacion) {
-            const error = new Error('Debe reservar con al menos 48 horas de anticipación');
-            error.statusCode = 409;
+        const { fecha_reserva } = req.body; // Ej: "2025-10-16"
+
+        const partes = fecha_reserva.split('-');
+        const fechaReservaLocal = new Date(partes[0], partes[1] - 1, partes[2]);
+
+        const fechaMinimaPermitida = new Date();
+        fechaMinimaPermitida.setHours(fechaMinimaPermitida.getHours() + 72);
+
+        if (fechaReservaLocal < fechaMinimaPermitida) {
+            const error = new Error('Debe reservar con al menos 72 horas de anticipación');
+            error.statusCode = 400;
             return next(error);
         }
+        
         next();
     } catch (error) {
         next(error);

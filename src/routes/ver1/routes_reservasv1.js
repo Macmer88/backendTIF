@@ -46,7 +46,7 @@ const routerv1reservas = express.Router();
  */
 
 
-routerv1reservas.get('/', validatorsReservas.validarIdReserva, controladoresReservas.mostrarReservas);
+routerv1reservas.get('/', controladoresReservas.mostrarReservas);
 
 /**
  * @swagger
