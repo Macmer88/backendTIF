@@ -71,12 +71,41 @@ export async function volverReservaActiva(req, res){
     };
 }
 
-export async function nuevaReserva(req, res){
+/*export async function nuevaReserva(req, res){
     try{
         const resultado = await servicioReservas.crearReserva(req.body);
         res.status(201).json(resultado);
     }catch(err){
         console.error("Error en crearReserva:", err.message);
         res.status(500).json({error: 'Error al crear'});
+    }
+}*/
+
+export async function nuevaReserva(req, res, next){ // Usamos next para el manejo de errores
+    try{
+        // 1. Extraemos los datos de texto del body
+        const datosDelBody = req.body;
+
+        // 2. Verificamos si se subió un archivo
+        if (!req.file) {
+            // Si el archivo es obligatorio, lanzamos un error
+            const error = new Error('La foto del cumpleañero es obligatoria.');
+            error.statusCode = 400;
+            throw error;
+        }
+
+        // 3. Creamos el objeto de datos COMPLETO para el servicio
+        const datosCompletos = {
+            ...datosDelBody, // Copiamos todos los campos de texto
+            foto_cumpleaniero: req.file.path // Añadimos la ruta del archivo
+        };
+
+        // 4. Llamamos al servicio con el objeto ya unificado
+        const resultado = await servicioReservas.crearReserva(datosCompletos);
+        
+        res.status(201).json(resultado);
+    } catch(err) {
+        console.error("Error en crearReserva:", err.message);
+        next(err); 
     }
 }
