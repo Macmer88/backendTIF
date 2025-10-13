@@ -3,6 +3,8 @@ import setupHandlebars from './src/config/handlebars.js';
 import routerv1salones from './src/routes/ver1/routes_salonv1.js';
 import routerv2salones from './src/routes/ver2/routes_salon.js';
 import routerv1reservas from './src/routes/ver1/routes_reservasv1.js';
+import routerv1reservas_salones from './src/routes/ver1/routes_reservasv1.js';
+import routesReservasServicios from './src/routes/ver1/routes_reservas_servicios.js';
 import corsMiddleware from './src/midlewares/global/corsconfig.js';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/docs/swaggerConfig.js';
@@ -25,6 +27,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(helmet());
 app.use('/api/ver1/salones', routerv1salones);
 app.use('/api/ver1/reservas', routerv1reservas);
+app.use('/api/ver1/reservas_salones', routerv1reservas_salones);
+app.use('/api/ver1/reservas_servicios', routesReservasServicios);
 
 app.use('/api/ver2/salones', routerv2salones);
 
