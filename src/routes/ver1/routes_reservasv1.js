@@ -1,6 +1,7 @@
 import * as controladoresReservas from '../../controllers/ver1/controller_reservas.js';
 import * as validatorsReservas from '../../midlewares/validators/reservasValidators.js';
 import * as midlewareReservas from '../../midlewares/specifics/midlewareReservas.js';
+import { uploadCumpleanero } from '../../config/multer.js';
 import express from 'express';
 const routerv1reservas = express.Router();
 
@@ -171,7 +172,7 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -181,7 +182,6 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
  *               - turno_id
  *               - foto_cumpleaniero
  *               - tematica
- *               - importe_salon
  *               - importe_total
  *             properties:
  *               fecha_reserva:
@@ -195,7 +195,8 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
  *                 type: integer
  *               foto_cumpleaniero:
  *                 type: string
- *                 format: uri
+ *                 format: binary
+ *                 description: Foto del cumpleañero
  *               tematica:
  *                 type: string
  *               importe_total:
@@ -209,6 +210,9 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
  *         description: Error del servidor
  */
 
-routerv1reservas.post('/crear',   midlewareReservas.validarFecha, midlewareReservas.validarExtension, midlewareReservas.estaDisponible, validatorsReservas.validarReservas, controladoresReservas.nuevaReserva);
+routerv1reservas.post('/crear',   uploadCumpleanero.single('foto_cumpleaniero'), midlewareReservas.validarFecha, midlewareReservas.validarExtension, midlewareReservas.estaDisponible, validatorsReservas.validarReservas, controladoresReservas.nuevaReserva);
 
 export default routerv1reservas;
+
+
+

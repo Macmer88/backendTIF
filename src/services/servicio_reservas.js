@@ -65,7 +65,7 @@ export async function crearReserva(datos) {
     const { fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_total } = datos;
     const salon_elegido = await salonesPorId(salon_id);
     let importe = salon_elegido.importe;
-    if (!fecha_reserva || !salon_id || !usuario_id || !turno_id || foto_cumpleaniero === undefined || tematica === undefined || importe_total === undefined) {
+    if (!fecha_reserva || !salon_id || !usuario_id || !turno_id || tematica === undefined || importe_total === undefined) {
         throw new Error("Faltan campos obligatorios");
     }
 
