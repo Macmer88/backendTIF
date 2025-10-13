@@ -50,6 +50,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uglify-js": "^3.19.3",
+    "uuid": "^13.0.0",
     "which": "^2.0.2",
     "wordwrap": "^1.0.0",
     "wrap-ansi": "^8.1.0",
