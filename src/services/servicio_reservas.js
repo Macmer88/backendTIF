@@ -74,6 +74,15 @@ export async function crearReserva(datos) {
 
     await modeloReservas.createReserva({ reserva_id: nuevoId, fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon:importe, importe_total });
 
-    return { mensaje: 'Reserva creada con éxito', reserva_id: nuevoId };
+    return { mensaje: 'Reserva creada con éxito.' };
 }
 
+export async function verificarDisponibilidad(salon_id, fecha_reserva, turno_id) {
+    const disponible = await modeloReservas.verificarDisponible(salon_id, fecha_reserva, turno_id);
+    if (!disponible) {
+        const error = new Error('El salón no está disponible para la fecha y turno seleccionados');
+        error.statusCode = 409;
+        throw error;
+    }
+    return { mensaje: 'El salón está disponible' };
+}

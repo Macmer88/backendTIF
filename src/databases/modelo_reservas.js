@@ -54,3 +54,11 @@ export async function createReserva(datos) {
         [reserva_id, fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total]
     );
 }
+
+export async function verificarDisponible(salon_id, fecha_reserva, turno_id) {
+    const [rows] = await pool.query(
+        'SELECT * FROM reservas WHERE salon_id = ? AND fecha_reserva = ? AND turno_id = ? AND activo = 1',
+        [salon_id, fecha_reserva, turno_id]
+    );
+    return rows.length === 0; // Retorna true si está disponible, false si no lo está
+}
