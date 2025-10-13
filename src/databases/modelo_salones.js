@@ -60,7 +60,7 @@ export async function buscarPorTitulo(nombre_salon){
     return rows[0];
 }
 
-export async function buscarPorDireccion(direccion){
+export async function buscarPorDireccion(direccion_salon){
     const [rows] = await pool.query('SELECT * FROM salones WHERE direccion = ? LIMIT 1', [direccion_salon]);
     return rows[0];
 }

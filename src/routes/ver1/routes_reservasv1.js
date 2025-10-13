@@ -1,4 +1,7 @@
 import * as controladoresReservas from '../../controllers/ver1/controller_reservas.js';
+import * as validatorsReservas from '../../midlewares/validators/reservasValidators.js';
+import * as midlewareReservas from '../../midlewares/specifics/midlewareReservas.js';
+import { uploadCumpleanero } from '../../config/multer.js';
 import express from 'express';
 const routerv1reservas = express.Router();
 
@@ -110,7 +113,7 @@ routerv1reservas.get('/:id', controladoresReservas.mostrarReservasPorId);
  *         description: Error del servidor
  */
 
-routerv1reservas.put('/:id', controladoresReservas.updateReserva);
+routerv1reservas.put('/:id', validatorsReservas.validarIdReserva, validatorsReservas.validarReservas, controladoresReservas.updateReserva);
 
 /**
  * @swagger
@@ -134,7 +137,7 @@ routerv1reservas.put('/:id', controladoresReservas.updateReserva);
  *         description: Error del servidor
  */
 
-routerv1reservas.delete('/:id', controladoresReservas.borrarReserva);
+routerv1reservas.delete('/:id', validatorsReservas.validarIdReserva, controladoresReservas.borrarReserva);
 
 /**
  * @swagger
@@ -158,7 +161,7 @@ routerv1reservas.delete('/:id', controladoresReservas.borrarReserva);
  *         description: Error del servidor
  */
 
-routerv1reservas.patch('/:id/reactivar', controladoresReservas.volverReservaActiva);
+routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, controladoresReservas.volverReservaActiva);
 
 /**
  * @swagger
@@ -169,7 +172,7 @@ routerv1reservas.patch('/:id/reactivar', controladoresReservas.volverReservaActi
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -179,7 +182,6 @@ routerv1reservas.patch('/:id/reactivar', controladoresReservas.volverReservaActi
  *               - turno_id
  *               - foto_cumpleaniero
  *               - tematica
- *               - importe_salon
  *               - importe_total
  *             properties:
  *               fecha_reserva:
@@ -193,7 +195,8 @@ routerv1reservas.patch('/:id/reactivar', controladoresReservas.volverReservaActi
  *                 type: integer
  *               foto_cumpleaniero:
  *                 type: string
- *                 format: uri
+ *                 format: binary
+ *                 description: Foto del cumpleañero
  *               tematica:
  *                 type: string
  *               importe_total:
@@ -207,6 +210,9 @@ routerv1reservas.patch('/:id/reactivar', controladoresReservas.volverReservaActi
  *         description: Error del servidor
  */
 
-routerv1reservas.post('/crear', controladoresReservas.nuevaReserva);
+routerv1reservas.post('/crear',   uploadCumpleanero.single('foto_cumpleaniero'), midlewareReservas.validarFecha, midlewareReservas.validarExtension, midlewareReservas.estaDisponible, validatorsReservas.validarReservas, controladoresReservas.nuevaReserva);
 
 export default routerv1reservas;
+
+
+

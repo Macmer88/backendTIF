@@ -18,8 +18,8 @@ export const validarSalones = [
 
     body('importe')
         .notEmpty().withMessage('Debe ingresar un importe')
-        .isInt({ min: 1 }).withMessage('El importe debe ser un número entero positivo')
-        .toInt(),
+        .isFloat({ min: 1 }).withMessage('El importe debe ser un número entero positivo')
+        .toFloat(),
 
     // Middleware final para verificar si hubo errores
     (req, res, next) => {
