@@ -1,3 +1,8 @@
+/*
+
+CÓDIGO EN CONSTRUCCIÓN - NO UTILIZAR
+
+
 import * as servicio from '../../services/servicio_reservas_servicios.js';
 
 export async function mostrarReservasServicios(req, res) {
@@ -53,3 +58,4 @@ export async function borrarReservaServicio(req, res) {
         res.status(500).json({ error: err.message });
     }
 }
+*/

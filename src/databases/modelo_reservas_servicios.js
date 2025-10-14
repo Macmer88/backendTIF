@@ -1,3 +1,10 @@
+/*
+
+CÓDIGO EN CONSTRUCCIÓN - NO UTILIZAR
+
+
+
+
 import { pool } from '../config/db.js';
 
 export async function obtenerTodos() {
@@ -36,4 +43,4 @@ export async function eliminar(id) {
     await pool.query(
         'DELETE FROM reservas_servicios WHERE reserva_servicio_id = ?', [id]
     );
-}
+}*/

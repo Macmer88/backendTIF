@@ -1,3 +1,7 @@
+/*
+
+CÓDIGO EN CONSTRUCCIÓN - NO UTILIZAR
+
 import * as modelo from '../databases/modelo_reservas_servicios.js';
 
 export async function fetchReservasServicios() {
@@ -37,3 +41,5 @@ export async function eliminarReservaServicio(id) {
     await modelo.eliminar(id);
     return { mensaje: 'Reserva de servicio eliminada' };
 }
+
+*/
