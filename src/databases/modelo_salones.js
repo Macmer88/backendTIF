@@ -42,10 +42,10 @@ export async function reactivateSalon(id){
 }
 
 
-export async function buscarUltId() {
+/*export async function buscarUltId() {
     const [rows] = await pool.query('SELECT salon_id FROM salones ORDER BY salon_id DESC LIMIT 1');
     return rows[0]?.salon_id || 0;
-}
+}*/ //No se usa porque el id es autoincremental
 
 export async function createSalon(datos) {
     const { salon_id, titulo, direccion, capacidad, importe } = datos;

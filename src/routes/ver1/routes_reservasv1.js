@@ -212,6 +212,12 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
 
 routerv1reservas.post('/crear',   uploadCumpleanero.single('foto_cumpleaniero'), midlewareReservas.validarFecha, midlewareReservas.validarExtension, midlewareReservas.estaDisponible, validatorsReservas.validarReservas, controladoresReservas.nuevaReserva);
 
+
+
+routerv1reservas.patch('/foto/:id', validatorsReservas.validarIdReserva, uploadCumpleanero.single('foto_cumpleaniero'), midlewareReservas.validarExtension, controladoresReservas.cambiarFotoCumpleaniero);
+
+
+
 export default routerv1reservas;
 
 

@@ -1,5 +1,7 @@
 import * as modeloReservas from '../databases/modelo_reservas.js';
 import { salonesPorId } from '../databases/modelo_salones.js';
+import { deleteImage } from '../utils/fileutils.js';
+import createError from 'http-errors';
 
 export async function fetchReservas(activo,ordenar,desc,limit,offset) {
     return await modeloReservas.reservasConFiltro(activo,ordenar,desc,limit,offset);
@@ -69,10 +71,10 @@ export async function crearReserva(datos) {
         throw new Error("Faltan campos obligatorios");
     }
 
-    const ultimoId = await modeloReservas.buscarUltId();
-    const nuevoId = ultimoId + 1;
+/*    const ultimoId = await modeloReservas.buscarUltId();
+    const nuevoId = ultimoId + 1;*/ //No es necesario si la BD lo maneja automáticamente
 
-    await modeloReservas.createReserva({ reserva_id: nuevoId, fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon:importe, importe_total });
+    await modeloReservas.createReserva({fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon:importe, importe_total });
 
     return { mensaje: 'Reserva creada con éxito.' };
 }
@@ -86,3 +88,21 @@ export async function verificarDisponibilidad(salon_id, fecha_reserva, turno_id)
     }
     return { mensaje: 'El salón está disponible' };
 }
+
+
+export const cambiarFoto = async (id, nuevoArchivo) => { 
+    const idNumerico = parseInt(id, 10);
+
+    const reserva = await modeloReservas.reservasPorId(idNumerico);
+    if (!reserva) {
+        throw createError(404, 'La reserva no fue encontrada.');
+    }
+
+    const fotoAntigua = reserva.foto_cumpleaniero;
+    const datosParaActualizar = { foto_cumpleaniero: nuevoArchivo.filename };
+
+    const reservaActualizada = await modeloReservas.actualizar(idNumerico, datosParaActualizar);
+
+    await deleteImage(fotoAntigua);
+    return reservaActualizada;
+};

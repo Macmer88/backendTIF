@@ -1,4 +1,4 @@
-import { salonesConFiltro, updateSalon, deleteSalon, reactivateSalon, createSalon, buscarUltId, buscarPorTitulo, buscarPorDireccion } from '../databases/modelo_salones.js';
+import { salonesConFiltro, updateSalon, deleteSalon, reactivateSalon, createSalon, /*buscarUltId,*/ buscarPorTitulo, buscarPorDireccion } from '../databases/modelo_salones.js';
 import { salonesPorId} from '../databases/modelo_salones.js';
 
 
@@ -73,12 +73,12 @@ export async function crearSalon(datos) {
         throw new Error("Faltan campos obligatorios");
     }
 
-    const ultimoId = await buscarUltId();
-    const nuevoId = ultimoId + 1;
+/*    const ultimoId = await buscarUltId(); //No se usa porque el id es autoincremental
+    const nuevoId = ultimoId + 1;*/
 
-    await createSalon({ salon_id: nuevoId, titulo, direccion, capacidad, importe });
+    await createSalon({ /*salon_id: nuevoId,*/ titulo, direccion, capacidad, importe });
 
-    return { mensaje: 'Salón creado con éxito', salon_id: nuevoId };
+    return { mensaje: 'Salón creado con éxito', salon_id: datos.salon_id };
 }
 
 

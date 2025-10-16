@@ -62,3 +62,12 @@ export async function verificarDisponible(salon_id, fecha_reserva, turno_id) {
     );
     return rows.length === 0; // Retorna true si está disponible, false si no lo está
 }
+
+export async function actualizar(reserva_id, datosParaActualizar) {
+    const nuevoNombreFoto = datosParaActualizar.foto_cumpleaniero;
+    const [resultado] = await pool.query(
+        'UPDATE reservas SET foto_cumpleaniero = ? WHERE reserva_id = ?',
+        [nuevoNombreFoto, reserva_id]
+    );
+    return resultado;
+}

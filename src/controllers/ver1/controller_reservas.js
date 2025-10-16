@@ -1,4 +1,5 @@
 import * as servicioReservas from '../../services/servicio_reservas.js';
+import { deleteImage } from '../../utils/fileutils.js';
 
 export async function mostrarReservas(req, res) {
     const {
@@ -109,3 +110,30 @@ export async function nuevaReserva(req, res, next){ // Usamos next para el manej
         next(err); 
     }
 }
+
+// Controlador para cambiar la foto del cumpleañero
+
+
+export const cambiarFotoCumpleaniero = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        console.log('Parámetros de la ruta (req.params):', req.params);
+
+        if (!req.file) {
+            return res.status(400).json({ msg: 'No se ha subido ningún archivo de imagen.' });
+        }
+
+        const reservaActualizada = await servicioReservas.cambiarFoto(id, req.file);
+
+        res.status(200).json({
+            msg: 'La foto fue actualizada con éxito.',
+            reserva: reservaActualizada,
+        });
+    } catch (error) {
+        if (req.file) {
+            await deleteImage(req.file.filename);
+        }
+
+        next(error);
+    }
+};
