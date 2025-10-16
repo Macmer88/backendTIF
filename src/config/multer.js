@@ -1,10 +1,19 @@
 import multer from 'multer';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid'; 
+import fs from 'fs';
+
+
+const uploadDirectory = 'src/uploads/cumpleaneros';
+
+if (!fs.existsSync(uploadDirectory)) {
+    fs.mkdirSync(uploadDirectory, { recursive: true });
+    console.log(`Directorio creado: ${uploadDirectory}`);
+}
 
 const storage = multer.diskStorage({
 
-    destination: 'src/uploads/cumpleaneros',
+    destination: uploadDirectory,
 
     filename: (req, file, cb) => {
         const extension = path.extname(file.originalname);
