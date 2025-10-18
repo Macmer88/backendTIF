@@ -1,7 +1,7 @@
 import { fetchSalones, modificarSalon, eliminarSalon, reactivarSalon, crearSalon } from '../../services/servicio_salones.js';
 import { fetchSalonById } from '../../services/servicio_salones.js';
 
-export async function mostrarSalones(req, res) {
+export async function mostrarSalones(req, res, next) {
     const {
         inactivos,
         page = 1,
@@ -24,57 +24,53 @@ export async function mostrarSalones(req, res) {
         );
         res.json(salones);
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener salones' });
+        next(error);
     }
 }
 
-export async function mostrarSalonPorId(req, res) {
+export async function mostrarSalonPorId(req, res, next) {
     const { id } = req.params;
     
     try {
         const salon = await fetchSalonById(id);
         res.json(salon);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        next(error);
     }
 }
 
-export async function updateSalon(req, res) {
+export async function updateSalon(req, res, next) {
     try {
         await modificarSalon(req.params.id, req.body);
         res.json({ message: 'Salón actualizado' });
     } catch (err) {
-        console.error("Error en updateSalon:", err.message);
-        res.status(500).json({ error: 'Error al actualizar' });
+        next(err);
     }
 }
 
-export async function borrarSalon(req, res){
+export async function borrarSalon(req, res, next){
     try{
         await eliminarSalon(req.params.id);
         res.json({mensaje: 'Salón eliminado'});
     }catch(err){
-        console.error("Error en borrarSalon:", err.message);
-        res.status(500).json({error: 'Error al eliminar'});
+        next(err);
     };
 }
 
-export async function volverSalonActivo(req, res){
+export async function volverSalonActivo(req, res, next){
     try{
         await reactivarSalon(req.params.id);
         res.json({mensaje: 'Salón reactivado'});
     }catch(err){
-        console.error("Error en reactivarSalon:", err.message);
-        res.status(500).json({error: 'Error al reactivar'});
+    next(err);
     };
 }
 
-export async function nuevoSalon(req, res){
+export async function nuevoSalon(req, res, next){
     try{
         await crearSalon(req.body);
         res.json({mensaje: 'Salón creado'});
     }catch(err){
-        console.error("Error en crearSalon:", err.message);
-        res.status(500).json({error: 'Error al crear'});
+        next(err);
     }
 }

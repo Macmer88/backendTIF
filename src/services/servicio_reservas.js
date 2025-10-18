@@ -10,7 +10,7 @@ export async function fetchReservas(activo,ordenar,desc,limit,offset) {
 export async function reservasById(id){
     const reserva = await modeloReservas.reservasPorId(id);
     if(!reserva){
-        throw new Error('Reserva no encontrada');
+        throw createError(404,'Reserva no encontrada')
     }
     if (reserva.activo !==1){
         return{
@@ -23,6 +23,10 @@ export async function reservasById(id){
     return {mensaje: 'Reserva activa', reserva};
 }
 
+export async function fetchReservasPorSalon(salon_id){
+    return await modeloReservas.reservasPorsalon(salon_id);
+}
+
 export async function modificarReserva(id, datos) {
     const { fecha_reserva, salon_id, turno_id, importe_total } = datos;
     if (
@@ -31,7 +35,7 @@ export async function modificarReserva(id, datos) {
         turno_id === undefined ||
         importe_total === undefined
     ) {
-        throw new Error("Faltan campos obligatorios");
+        throw  createError(400,"Faltan campos obligatorios");
     }
 
     await modeloReservas.updateReservas(id, { fecha_reserva, salon_id, turno_id, importe_total});
@@ -41,11 +45,11 @@ export async function eliminarReserva(id) {
     const estadoReserva = await modeloReservas.reservasPorId(id);
     console.log('estadoReserva:', estadoReserva);
     if (!estadoReserva) {
-        throw new Error('La reserva no existe');
+        throw createError(404,'La reserva no existe');
     }
 
     if (estadoReserva.activo === 0) {
-        throw new Error('La reserva ya está inactiva');
+        throw createError(400,'La reserva ya está inactiva');
     }
     await modeloReservas.deleteReserva(id);
     return { mensaje: 'Reserva eliminada' };
@@ -54,10 +58,10 @@ export async function eliminarReserva(id) {
 export async function reactivarReserva(id) {
     const estadoReserva = await modeloReservas.reservasPorId(id);
     if (!estadoReserva) {
-        throw new Error('La reserva no existe');
+        throw createError(404,'La reserva no existe');
     }
     if (estadoReserva.activo === 1) {
-        throw new Error('La reserva ya está activa');
+        throw createError(409,'La reserva ya está activa');
     }
     await modeloReservas.reactivateReserva(id);
     return { mensaje: 'La reserva fue reactivada con éxito' };
@@ -68,7 +72,7 @@ export async function crearReserva(datos) {
     const salon_elegido = await salonesPorId(salon_id);
     let importe = salon_elegido.importe;
     if (!fecha_reserva || !salon_id || !usuario_id || !turno_id || tematica === undefined || importe_total === undefined) {
-        throw new Error("Faltan campos obligatorios");
+        throw createError(400,"Faltan campos obligatorios");
     }
 
 /*    const ultimoId = await modeloReservas.buscarUltId();
@@ -82,9 +86,7 @@ export async function crearReserva(datos) {
 export async function verificarDisponibilidad(salon_id, fecha_reserva, turno_id) {
     const disponible = await modeloReservas.verificarDisponible(salon_id, fecha_reserva, turno_id);
     if (!disponible) {
-        const error = new Error('El salón no está disponible para la fecha y turno seleccionados');
-        error.statusCode = 409;
-        throw error;
+        throw createError(409,'El salón no está disponible para la fecha y turno seleccionados');
     }
     return { mensaje: 'El salón está disponible' };
 }

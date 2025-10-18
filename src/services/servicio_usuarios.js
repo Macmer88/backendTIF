@@ -1,0 +1,93 @@
+import * as modeloUsuarios from '../databases/modelo_usuarios.js';
+import { deleteImage } from '../utils/fileutils.js';
+import createError from 'http-errors';
+
+export async function fetchUsuarios(activo, ordenar, desc, limit, offset) {
+    return await modeloUsuarios.usuariosConFiltro(activo, ordenar, desc, limit, offset);
+}
+
+export async function fetchUsuarioById(id) {
+    const usuario = await modeloUsuarios.usuariosPorId(id);
+    if (!usuario) {
+        throw new Error('Usuario no encontrado');
+    }
+    if (usuario.activo !== 1) {
+        return {
+            mensaje: 'Usuario inactivo',
+            usuario_id: usuario.usuario_id,
+            nombre: usuario.nombre,
+            estado: 'inactivo'
+        };
+    }
+    return { mensaje: 'Usuario activo', usuario };
+}
+
+export async function deleteUsuario(id) {
+    const usuario = await modeloUsuarios.usuariosPorId(id);
+    if (!usuario) {
+        throw new Error('Usuario no encontrado');
+    }
+    if (usuario.activo !== 1) {
+        return { mensaje: 'El usuario ya está inactivo', usuario_id: usuario.usuario_id };
+    }
+    await modeloUsuarios.eliminarUsuario(id);
+    return { mensaje: 'Usuario eliminado', usuario_id: id };
+}
+
+export async function reactivateUsuario(id) {  
+    const usuario = await modeloUsuarios.usuariosPorId(id);
+    if (!usuario) {
+        throw new Error('Usuario no encontrado');
+    }
+    if (usuario.activo === 1) {
+        return { mensaje: 'El usuario ya está activo', usuario_id: usuario.usuario_id };
+    }
+    await modeloUsuarios.reactivarUsuario(id);
+    return { mensaje: 'Usuario reactivado', usuario_id: id };
+}
+
+export async function updateUsuario(id, datos) {
+    const { nombre, apellido, contrasenia, tipo_usuario, celular } = datos;
+
+    if (    nombre === undefined ||
+            apellido === undefined ||
+            contrasenia === undefined ||
+            tipo_usuario === undefined ||
+            celular === undefined) {
+        throw new Error("Faltan campos obligatorios");
+    }
+    const name = datos.nombre;
+    const surname = datos.apellido;
+    const nombre_usuario = name.slice(0, 2).toUpperCase() + surname.slice(0, 2).toUpperCase() + '@tif.com';
+    
+    await modeloUsuarios.actualizarUsuario(id, { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular });
+    console.log('Usuario actualizado:', { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular });
+    return { mensaje: 'Usuario actualizado', usuario_id: id };
+}
+
+export async function createUser(datos) {
+    const { nombre, apellido, contrasenia, tipo_usuario, celular, foto } = datos;
+    const name = datos.nombre;
+    const surname = datos.apellido;
+    const nombre_usuario = name.slice(0, 2).toUpperCase() + surname.slice(0, 2).toUpperCase() + '@tif.com';
+    await modeloUsuarios.crearUsuario({ nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto });
+    console.log('Usuario creado:', { datos});
+    return { mensaje: 'Usuario creado', nombre_usuario };
+}
+
+export const cambiarFoto = async (id, nuevoArchivo) => { 
+    const idNumerico = parseInt(id, 10);
+
+    const usuario = await modeloUsuarios.usuariosPorId(idNumerico);
+    if (!usuario) {
+        throw createError(404, 'El usuario no fue encontrado.');
+    }
+
+    const fotoAntigua = usuario.foto;
+    const datosParaActualizar = { foto: nuevoArchivo.filename };
+
+    const usuarioActualizado = await modeloUsuarios.actualizar(idNumerico, datosParaActualizar);
+
+    await deleteImage(fotoAntigua);
+    return usuarioActualizado;
+};

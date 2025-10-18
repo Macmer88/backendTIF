@@ -1,7 +1,7 @@
 import * as controladoresReservas from '../../controllers/ver1/controller_reservas.js';
 import * as validatorsReservas from '../../midlewares/validators/reservasValidators.js';
 import * as midlewareReservas from '../../midlewares/specifics/midlewareReservas.js';
-import { uploadCumpleanero } from '../../config/multer.js';
+import { uploadImagen } from '../../config/multer.js';
 import express from 'express';
 const routerv1reservas = express.Router();
 
@@ -210,11 +210,11 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
  *         description: Error del servidor
  */
 
-routerv1reservas.post('/crear',   uploadCumpleanero.single('foto_cumpleaniero'), midlewareReservas.validarFecha, midlewareReservas.validarExtension, midlewareReservas.estaDisponible, validatorsReservas.validarReservas, controladoresReservas.nuevaReserva);
+routerv1reservas.post('/crear',   uploadImagen.single('foto_cumpleaniero'), midlewareReservas.validarFecha, midlewareReservas.validarExtension, midlewareReservas.estaDisponible, validatorsReservas.validarReservas, controladoresReservas.nuevaReserva);
 
 
 
-routerv1reservas.patch('/foto/:id', validatorsReservas.validarIdReserva, uploadCumpleanero.single('foto_cumpleaniero'), midlewareReservas.validarExtension, controladoresReservas.cambiarFotoCumpleaniero);
+routerv1reservas.patch('/foto/:id', validatorsReservas.validarIdReserva, uploadImagen.single('foto_cumpleaniero'), midlewareReservas.validarExtension, controladoresReservas.cambiarFotoCumpleaniero);
 
 
 

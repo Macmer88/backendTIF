@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 
 
-const uploadDirectory = 'src/uploads/cumpleaneros';
+const uploadDirectory = 'src/public/uploads/cumpleaneros';
 
 if (!fs.existsSync(uploadDirectory)) {
     fs.mkdirSync(uploadDirectory, { recursive: true });
@@ -34,7 +34,7 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-const uploadCumpleanero = multer({ 
+const uploadImagen = multer({ 
     storage: storage,
     fileFilter: fileFilter,
     limits: {
@@ -42,4 +42,4 @@ const uploadCumpleanero = multer({
     }
 });
 
-export { uploadCumpleanero };
+export { uploadImagen };
