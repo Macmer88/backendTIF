@@ -14,7 +14,7 @@ export const deleteImage = async (fileName) => {
     try {
         // Construimos la ruta completa al archivo que queremos borrar.
 
-        const filePath = path.join(__dirname, '../uploads/cumpleaneros', fileName);
+        const filePath = path.join(__dirname, '../public/uploads/cumpleaneros', fileName);
 
         // Intentamos borrar el archivo.
         await unlink(filePath);

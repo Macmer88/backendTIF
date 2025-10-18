@@ -98,7 +98,7 @@ export async function nuevaReserva(req, res, next){ // Usamos next para el manej
         // 3. Creamos el objeto de datos COMPLETO para el servicio
         const datosCompletos = {
             ...datosDelBody, // Copiamos todos los campos de texto
-            foto_cumpleaniero: req.file.path // Añadimos la ruta del archivo
+            foto_cumpleaniero: req.file.filename // Añadimos elnombre del archivo
         };
 
         // 4. Llamamos al servicio con el objeto ya unificado

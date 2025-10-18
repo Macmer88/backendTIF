@@ -39,3 +39,20 @@ export async function actualizarUsuario(id, datos){
     return datos;
 }
 
+export async function crearUsuario(datos){
+    const {nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto } = datos;
+    await pool.query(
+        `INSERT INTO usuarios (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto]
+    );
+    return {datos };
+}
+
+export async function actualizar(usuario_id, datosParaActualizar) {
+    const nuevoNombreFoto = datosParaActualizar.foto;
+    const [resultado] = await pool.query(
+        'UPDATE usuarios SET foto = ? WHERE usuario_id = ?',
+        [nuevoNombreFoto, usuario_id]
+    );
+    return resultado;
+}

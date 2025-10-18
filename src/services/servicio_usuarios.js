@@ -1,4 +1,6 @@
 import * as modeloUsuarios from '../databases/modelo_usuarios.js';
+import { deleteImage } from '../utils/fileutils.js';
+import createError from 'http-errors';
 
 export async function fetchUsuarios(activo, ordenar, desc, limit, offset) {
     return await modeloUsuarios.usuariosConFiltro(activo, ordenar, desc, limit, offset);
@@ -62,3 +64,30 @@ export async function updateUsuario(id, datos) {
     console.log('Usuario actualizado:', { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular });
     return { mensaje: 'Usuario actualizado', usuario_id: id };
 }
+
+export async function createUser(datos) {
+    const { nombre, apellido, contrasenia, tipo_usuario, celular, foto } = datos;
+    const name = datos.nombre;
+    const surname = datos.apellido;
+    const nombre_usuario = name.slice(0, 2).toUpperCase() + surname.slice(0, 2).toUpperCase() + '@tif.com';
+    await modeloUsuarios.crearUsuario({ nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto });
+    console.log('Usuario creado:', { datos});
+    return { mensaje: 'Usuario creado', nombre_usuario };
+}
+
+export const cambiarFoto = async (id, nuevoArchivo) => { 
+    const idNumerico = parseInt(id, 10);
+
+    const usuario = await modeloUsuarios.usuariosPorId(idNumerico);
+    if (!usuario) {
+        throw createError(404, 'El usuario no fue encontrado.');
+    }
+
+    const fotoAntigua = usuario.foto;
+    const datosParaActualizar = { foto: nuevoArchivo.filename };
+
+    const usuarioActualizado = await modeloUsuarios.actualizar(idNumerico, datosParaActualizar);
+
+    await deleteImage(fotoAntigua);
+    return usuarioActualizado;
+};
