@@ -27,7 +27,6 @@ app.use(helmet());
 app.use('/api/ver1/salones', routerv1salones);
 app.use('/api/ver1/reservas', routerv1reservas);
 app.use('/api/ver1/usuarios', routerv1usuarios);
-//app.use('/api/ver1/reservas/foto/', routerv1reservas);
 
 app.use('/api/ver2/salones', routerv2salones);
 

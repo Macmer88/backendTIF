@@ -67,4 +67,54 @@ routerv1usuarios.get('/', controllerUsuariosver1.mostrarUsuarios);
  */
 routerv1usuarios.get('/:id', controllerUsuariosver1.mostrarUsuarioPorId);
 
+/**
+ * @swagger
+ * /api/ver1/usuarios/{id}:
+ *   delete:
+ *     summary: Soft delete de un usuario por ID
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado correctamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:   
+ *         description: Error del servidor
+ */
+
+routerv1usuarios.delete('/:id', controllerUsuariosver1.eliminarUsuario);
+
+/**
+ * @swagger
+ * /api/ver1/usuarios/{id}/reactivar:
+ *   patch:
+ *     summary: Reactivar un usuario por ID
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *         type: string
+ *         description: ID del usuario      
+ *     responses:
+ *       200:
+ *         description: Usuario reactivado correctamente
+ *       404: 
+ *         description: Usuario no encontrado
+ *       500:    
+ *         description: Error del servidor
+ */
+
+routerv1usuarios.patch('/:id/reactivar', controllerUsuariosver1.reactivarUsuario);
+
+routerv1usuarios.put('/:id', controllerUsuariosver1.actualizarUsuario);
+
 export default routerv1usuarios;

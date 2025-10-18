@@ -21,3 +21,21 @@ export async function usuariosPorId(id){
     const [rows] = await pool.query('SELECT * FROM usuarios WHERE usuario_id = ?', [id]);
     return rows[0];
 }
+
+export async function eliminarUsuario(id){
+    const [rows] = await pool.query('UPDATE usuarios SET activo = 0 WHERE usuario_id = ?', [id]);
+    return rows[0];
+}
+
+export async function reactivarUsuario(id){
+    const [rows] = await pool.query('UPDATE usuarios SET activo = 1 WHERE usuario_id = ?', [id]);
+    return rows[0];
+}
+
+export async function actualizarUsuario(id, datos){
+    const {nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular } = datos;
+        await pool.query(`UPDATE usuarios SET nombre = ?, apellido = ?, nombre_usuario = ?, contrasenia = ?, tipo_usuario = ?, celular = ? WHERE usuario_id = ?`,
+        [nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, id]);
+    return datos;
+}
+

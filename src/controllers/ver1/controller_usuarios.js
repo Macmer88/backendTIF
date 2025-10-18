@@ -37,3 +37,41 @@ export async function mostrarUsuarioPorId(req, res) {
         res.status(404).json({ error: error.message });
     }
 }
+
+export async function eliminarUsuario(req, res) {
+    const { id } = req.params;
+
+    try {
+        const resultado = await serviciosUsuarios.deleteUsuario(id);
+        res.json(resultado);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}
+
+export async function reactivarUsuario(req, res) {
+    const { id } = req.params;
+
+    try {
+        const resultado = await serviciosUsuarios.reactivateUsuario(id);
+        res.json(resultado);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}
+
+export async function actualizarUsuario(req, res) {
+    const { id } = req.params;
+    const datos = req.body;
+
+    try {
+        await serviciosUsuarios.updateUsuario(id, datos);
+        res.json({ mensaje: 'Usuario actualizado correctamente' });
+    } catch (error) {
+        if (error.message === "Faltan campos obligatorios") {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(404).json({ error: error.message });
+        }
+    }
+}

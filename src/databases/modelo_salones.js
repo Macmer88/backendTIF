@@ -48,10 +48,10 @@ export async function reactivateSalon(id){
 }*/ //No se usa porque el id es autoincremental
 
 export async function createSalon(datos) {
-    const { salon_id, titulo, direccion, capacidad, importe } = datos;
+    const {titulo, direccion, capacidad, importe } = datos;
     await pool.query(
-        'INSERT INTO salones (salon_id, titulo, direccion, capacidad, importe) VALUES (?, ?, ?, ?, ?)',
-        [salon_id, titulo, direccion, capacidad, importe]
+        'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?, ?, ?, ?, ?)',
+        [titulo, direccion, capacidad, importe]
     );
 }
 
