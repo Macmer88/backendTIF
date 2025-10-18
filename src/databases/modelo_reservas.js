@@ -4,7 +4,7 @@ export async function reservasConFiltro(activo, ordenar, desc, limit, offset) {
     let query = 'SELECT * FROM reservas WHERE activo = ?';
     const params = [activo];
 
-    const columnasValidas = ['reserva_id', 'importe_salon', 'fecha_reserva', 'creado', 'importe_total'];
+    const columnasValidas = ['reserva_id','salon_id', 'usuario_id', 'importe_salon', 'fecha_reserva', 'creado', 'importe_total'];
     if (ordenar && columnasValidas.includes(ordenar)) {
         query += ` ORDER BY ${ordenar}`;
         if (desc) query += ' DESC';
@@ -20,6 +20,11 @@ export async function reservasConFiltro(activo, ordenar, desc, limit, offset) {
 export async function reservasPorId(id){
     const [rows] = await pool.query('SELECT * FROM reservas WHERE reserva_id = ?', [id]);
     return rows[0];
+}
+
+export async function reservasPorsalon(salon_id){
+    const [rows] = await pool.query('SELECT * FROM reservas WHERE salon_id = ? AND activo = 1 AND fecha_reserva >= CURDATE()', [salon_id]);
+    return rows;
 }
 
 

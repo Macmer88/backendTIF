@@ -4,7 +4,7 @@ export async function salonesConFiltro(activo, ordenar, desc, limit, offset) {
     let query = 'SELECT * FROM salones WHERE activo = ?';
     const params = [activo];
 
-    const columnasValidas = ['titulo', 'importe', 'capacidad'];
+    const columnasValidas = ['salon_id','titulo', 'importe', 'capacidad'];
     if (ordenar && columnasValidas.includes(ordenar)) {
         query += ` ORDER BY ${ordenar}`;
         if (desc) query += ' DESC';
