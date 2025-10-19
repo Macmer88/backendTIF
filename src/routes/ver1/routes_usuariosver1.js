@@ -1,6 +1,6 @@
 import * as controllerUsuariosver1 from '../../controllers/ver1/controller_usuarios.js';
 import express from 'express';
-import { uploadImagen } from '../../config/multer.js';
+import { uploadUsuario } from '../../config/multer.js';
 
 
 const routerv1usuarios = express.Router();
@@ -190,7 +190,7 @@ routerv1usuarios.put('/:id', controllerUsuariosver1.actualizarUsuario);
  *           description: Error del servidor
  */
 
-routerv1usuarios.post('/crear', uploadImagen.single('foto'), controllerUsuariosver1.nuevoUsuario);
+routerv1usuarios.post('/crear', uploadUsuario.single('foto'), controllerUsuariosver1.nuevoUsuario);
 
 /**
  *  @swagger
@@ -226,6 +226,6 @@ routerv1usuarios.post('/crear', uploadImagen.single('foto'), controllerUsuariosv
  *       500:
  *         description: Error del servidor
  */
-routerv1usuarios.patch('/:id/foto', uploadImagen.single('foto'), controllerUsuariosver1.cambiarFotoUsuario);
+routerv1usuarios.patch('/:id/foto', uploadUsuario.single('foto'), controllerUsuariosver1.cambiarFotoUsuario);
 
 export default routerv1usuarios;

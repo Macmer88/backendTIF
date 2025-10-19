@@ -1,5 +1,6 @@
 import * as serviciosUsuarios from '../../services/servicio_usuarios.js';
-import { deleteImage } from '../../utils/fileutils.js';
+import { deleteUsuarioImage } from '../../utils/fileutils.js';
+
 
 export async function mostrarUsuarios(req, res) {
     const {
@@ -126,8 +127,10 @@ export const cambiarFotoUsuario = async (req, res, next) => {
             usuario: usuarioActualizado,
         });
     } catch (error) {
+        // Si se subió un archivo pero algo falló (ej: usuario no existe),
+        // borramos el archivo recién subido de la carpeta correcta.
         if (req.file) {
-            await deleteImage(req.file.filename);
+            await deleteUsuarioImage(req.file.filename); 
         }
 
         next(error);
