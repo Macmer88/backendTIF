@@ -1,3 +1,4 @@
+
 import * as modeloUsuarios from '../databases/modelo_usuarios.js';
 import { deleteImage } from '../utils/fileutils.js';
 import createError from 'http-errors';
@@ -48,30 +49,46 @@ export async function reactivateUsuario(id) {
 }
 
 export async function updateUsuario(id, datos) {
-    const { nombre, apellido, contrasenia, tipo_usuario, celular } = datos;
+    const { nombre, apellido, tipo_usuario, celular } = datos;
 
     if (    nombre === undefined ||
             apellido === undefined ||
-            contrasenia === undefined ||
             tipo_usuario === undefined ||
             celular === undefined) {
         throw new Error("Faltan campos obligatorios");
     }
-    const name = datos.nombre;
-    const surname = datos.apellido;
-    const nombre_usuario = name.slice(0, 2).toUpperCase() + surname.slice(0, 2).toUpperCase() + '@tif.com';
+    const name = datos.nombre.toLowerCase();
+    const surname = datos.apellido.toLowerCase();
+    const nombre_usuario = name.slice(0, 3)+ surname.slice(0, 3)+ '@correo.com';
     
-    await modeloUsuarios.actualizarUsuario(id, { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular });
-    console.log('Usuario actualizado:', { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular });
+    await modeloUsuarios.actualizarUsuario(id, { nombre, apellido, nombre_usuario, tipo_usuario, celular });
+    console.log('Usuario actualizado:', { nombre, apellido, nombre_usuario, tipo_usuario, celular });
     return { mensaje: 'Usuario actualizado', usuario_id: id };
 }
 
 export async function createUser(datos) {
     const { nombre, apellido, contrasenia, tipo_usuario, celular, foto } = datos;
+
+    // 1. Hasheamos la contraseña
+    const salt = await bcrypt.genSalt(10);
+    const contraseniaHasheada = await bcrypt.hash(contrasenia, salt);
+
+    // 2. Lógica de nombre_usuario
     const name = datos.nombre.toLowerCase();
     const surname = datos.apellido.toLowerCase();
     const nombre_usuario = name.slice(0, 3) + surname.slice(0, 3) + '@correo.com';
-    await modeloUsuarios.crearUsuario({ nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto });
+
+    // 3. Enviamos la contraseña hasheada al DAO
+    await modeloUsuarios.crearUsuario({ 
+        nombre, 
+        apellido, 
+        nombre_usuario, 
+        contrasenia: contraseniaHasheada, // <-- Se envía la versión encriptada
+        tipo_usuario, 
+        celular, 
+        foto 
+    });
+    
     console.log('Usuario creado:', { datos});
     return { mensaje: 'Usuario creado', nombre_usuario };
 }
