@@ -1,6 +1,7 @@
 import * as modeloUsuarios from '../databases/modelo_usuarios.js';
 import { deleteImage } from '../utils/fileutils.js';
 import createError from 'http-errors';
+import bcrypt from 'bcrypt';
 
 export async function fetchUsuarios(activo, ordenar, desc, limit, offset) {
     return await modeloUsuarios.usuariosConFiltro(activo, ordenar, desc, limit, offset);
