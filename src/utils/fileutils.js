@@ -30,3 +30,26 @@ export const deleteImage = async (fileName) => {
         }
     }
 };
+
+export const deleteUsuarioImage = async (fileName) => {
+    // Si no nos pasan un nombre de archivo, no hacemos nada.
+    if (!fileName) return;
+
+    try {
+        // Construimos la ruta completa a la carpeta de usuarios
+        const filePath = path.join(__dirname, '../public/uploads/usuarios', fileName);
+
+        // Intentamos borrar el archivo.
+        await unlink(filePath);
+        console.log(`Foto de usuario eliminada con éxito: ${fileName}`);
+    } catch (error) {
+        // Si el archivo no existe (código 'ENOENT'), no es un error crítico,
+        if (error.code === 'ENOENT') {
+            console.log(`La foto de usuario ${fileName} no fue encontrada, no se pudo eliminar.`);
+        } else {
+            // Para cualquier otro error, lo mostramos en la consola.
+            console.error(`Error al intentar eliminar la foto de usuario ${fileName}:`, error);
+        }
+    }
+};
+

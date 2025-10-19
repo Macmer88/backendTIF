@@ -1,7 +1,7 @@
 import * as controladoresReservas from '../../controllers/ver1/controller_reservas.js';
 import * as validatorsReservas from '../../midlewares/validators/reservasValidators.js';
 import * as midlewareReservas from '../../midlewares/specifics/midlewareReservas.js';
-import { uploadImagen } from '../../config/multer.js';
+import { uploadCumpleanero } from '../../config/multer.js';
 import express from 'express';
 const routerv1reservas = express.Router();
 
@@ -40,9 +40,9 @@ const routerv1reservas = express.Router();
  *           type: integer
  *         description: Desplazamiento para paginación
  *     responses:
- *       200:
+ *       "200":
  *         description: Lista de reservas obtenida correctamente
- *       500:
+ *       "500":
  *         description: Error del servidor
  */
 
@@ -63,11 +63,11 @@ routerv1reservas.get('/', controladoresReservas.mostrarReservas);
  *           type: string
  *         description: ID de la reserva a buscar
  *     responses:
- *       200:
+ *       "200":
  *         description: Reserva encontrada correctamente
- *       404:
+ *       "404":
  *         description: Reserva no encontrada
- *       500:
+ *       "500":
  *         description: Error del servidor
  */
 
@@ -103,13 +103,13 @@ routerv1reservas.get('/:id', controladoresReservas.mostrarReservasPorId);
  *               importe_total: 
  *                type: number
  *     responses:
- *       200:
+ *       "200":
  *         description: Reserva actualizada correctamente
- *       400:
+ *       "400":
  *         description: Datos inválidos
- *       404:
+ *       "404":
  *         description: Reserva no encontrada
- *       500:
+ *       "500":
  *         description: Error del servidor
  */
 
@@ -129,11 +129,11 @@ routerv1reservas.put('/:id', validatorsReservas.validarIdReserva, validatorsRese
  *           type: string
  *         description: ID de la reserva a dar de baja
  *     responses:
- *       200:
+ *       "200":
  *         description: Reserva marcada como inactiva correctamente
- *       404:
+ *       "404":
  *         description: Reserva no encontrada
- *       500:
+ *       "500":
  *         description: Error del servidor
  */
 
@@ -153,21 +153,22 @@ routerv1reservas.delete('/:id', validatorsReservas.validarIdReserva, controlador
  *           type: string
  *         description: ID de la reserva a reactivar
  *     responses:
- *       200:
+ *       "200":
  *         description: Reserva reactivada correctamente
- *       404:
+ *       "404":
  *         description: Reserva no encontrada
- *       500:
+ *       "500":
  *         description: Error del servidor
  */
 
 routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, controladoresReservas.volverReservaActiva);
 
+// ...existing code...
 /**
  * @swagger
  * /api/ver1/reservas/crear:
  *   post:
- *     summary: Crear un nuev reserva
+ *     summary: "Crear una nueva reserva"
  *     tags: [Reservas]
  *     requestBody:
  *       required: true
@@ -186,35 +187,122 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
  *             properties:
  *               fecha_reserva:
  *                 type: string
- *                 format: date-time
+ *                 format: date
+ *                 description: "Fecha en YYYY-MM-DD. Reglas: no pasada, min 72h, max 6 meses."
+ *                 example: "2025-12-25"
  *               salon_id:
  *                 type: integer
+ *                 description: "ID de un salón existente y activo."
+ *                 example: 1
  *               usuario_id:
  *                 type: integer
+ *                 description: "ID de un usuario existente y activo."
+ *                 example: 2
  *               turno_id:
  *                 type: integer
+ *                 description: "ID de un turno existente y activo."
+ *                 example: 3
  *               foto_cumpleaniero:
  *                 type: string
  *                 format: binary
- *                 description: Foto del cumpleañero
+ *                 description: "Foto del cumpleañero (opcional)."
  *               tematica:
  *                 type: string
+ *                 description: "Temática de la fiesta."
+ *                 example: "Superhéroes"
  *               importe_total:
  *                 type: number
+ *                 description: "Importe (por ahora manual)."
+ *                 example: 15000
  *     responses:
- *       201:
- *         description: Reserva creada correctamente
- *       400:
- *         description: Datos inválidos
- *       500:
- *         description: Error del servidor
+ *       "201":
+ *         description: "Reserva creada correctamente"
+ *       "400":
+ *         description: "Datos inválidos (Errores de validación)"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errores:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       type:
+ *                         type: string
+ *                         example: "field"
+ *                       value:
+ *                         type: string
+ *                         example: "999"
+ *                       msg:
+ *                         type: string
+ *                         example: "El salón seleccionado no existe o no está disponible."
+ *                       path:
+ *                         type: string
+ *                         example: "salon_id"
+ *                       location:
+ *                         type: string
+ *                         example: "body"
+ *       "409":
+ *         description: "El salón ya está ocupado"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "El salón no está disponible en la fecha y turno seleccionados"
+ *       "500":
+ *         description: "Error del servidor"
  */
 
-routerv1reservas.post('/crear',   uploadImagen.single('foto_cumpleaniero'), midlewareReservas.validarFecha, midlewareReservas.validarExtension, midlewareReservas.estaDisponible, validatorsReservas.validarReservas, controladoresReservas.nuevaReserva);
+routerv1reservas.post('/crear',   uploadCumpleanero.single('foto_cumpleaniero'), validatorsReservas.validarReservas, midlewareReservas.estaDisponible, controladoresReservas.nuevaReserva);
 
 
+/**
+ * @swagger
+ * /api/ver1/reservas/foto/{id}:
+ *   patch:
+ *     summary: "Actualizar solo la foto de una reserva"
+ *     description: "Actualiza la foto del cumpleañero. La foto anterior será eliminada."
+ *     tags: [Reservas]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: "ID de la reserva a la cual cambiar la foto"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - foto_cumpleaniero
+ *             properties:
+ *               foto_cumpleaniero:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Nueva foto del cumpleañero"
+ *     responses:
+ *       "200":
+ *         description: "Foto actualizada correctamente"
+ *       "400":
+ *         description: "No se ha subido ningún archivo o el formato no es válido"
+ *       "404":
+ *         description: "Reserva no encontrada"
+ *       "500":
+ *         description: "Error del servidor"
+ */
 
-routerv1reservas.patch('/foto/:id', validatorsReservas.validarIdReserva, uploadImagen.single('foto_cumpleaniero'), midlewareReservas.validarExtension, controladoresReservas.cambiarFotoCumpleaniero);
+routerv1reservas.patch('/foto/:id', validatorsReservas.validarIdReserva, uploadCumpleanero.single('foto_cumpleaniero'), controladoresReservas.cambiarFotoCumpleaniero);
 
 
 

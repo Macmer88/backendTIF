@@ -67,9 +67,9 @@ export async function updateUsuario(id, datos) {
 
 export async function createUser(datos) {
     const { nombre, apellido, contrasenia, tipo_usuario, celular, foto } = datos;
-    const name = datos.nombre;
-    const surname = datos.apellido;
-    const nombre_usuario = name.slice(0, 2).toUpperCase() + surname.slice(0, 2).toUpperCase() + '@tif.com';
+    const name = datos.nombre.toLowerCase();
+    const surname = datos.apellido.toLowerCase();
+    const nombre_usuario = name.slice(0, 3) + surname.slice(0, 3) + '@correo.com';
     await modeloUsuarios.crearUsuario({ nombre, apellido, nombre_usuario, contrasenia, tipo_usuario, celular, foto });
     console.log('Usuario creado:', { datos});
     return { mensaje: 'Usuario creado', nombre_usuario };
