@@ -6,6 +6,7 @@
   "dependencies": {
     "ansi-regex": "^6.2.2",
     "ansi-styles": "^6.2.3",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "color-convert": "^2.0.1",
     "color-name": "^1.1.4",
