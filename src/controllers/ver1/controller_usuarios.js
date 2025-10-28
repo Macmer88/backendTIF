@@ -2,7 +2,7 @@ import * as serviciosUsuarios from '../../services/servicio_usuarios.js';
 import { deleteUsuarioImage } from '../../utils/fileutils.js';
 
 
-export async function mostrarUsuarios(req, res) {
+export async function mostrarUsuarios(req, res, next) {
     const {
         inactivos,
         page = 1,
@@ -25,40 +25,39 @@ export async function mostrarUsuarios(req, res) {
         );
         res.json(usuarios);
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener usuarios' });
-    }
+        next(error);}
 }
 
-export async function mostrarUsuarioPorId(req, res) {
+export async function mostrarUsuarioPorId(req, res, next) {
     const { id } = req.params;
     
     try {
         const usuario = await serviciosUsuarios.fetchUsuarioById(id);
         res.json(usuario);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        next(error);
     }
 }
 
-export async function eliminarUsuario(req, res) {
+export async function eliminarUsuario(req, res, next) {
     const { id } = req.params;
 
     try {
         const resultado = await serviciosUsuarios.deleteUsuario(id);
         res.json(resultado);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        next(error);
     }
 }
 
-export async function reactivarUsuario(req, res) {
+export async function reactivarUsuario(req, res, next) {
     const { id } = req.params;
 
     try {
         const resultado = await serviciosUsuarios.reactivateUsuario(id);
         res.json(resultado);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        next(error);
     }
 }
 
@@ -70,11 +69,7 @@ export async function actualizarUsuario(req, res) {
         await serviciosUsuarios.updateUsuario(id, datos);
         res.json({ mensaje: 'Usuario actualizado correctamente' });
     } catch (error) {
-        if (error.message === "Faltan campos obligatorios") {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(404).json({ error: error.message });
-        }
+        next(error);
     }
 }
 

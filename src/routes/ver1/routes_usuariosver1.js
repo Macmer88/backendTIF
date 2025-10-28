@@ -1,6 +1,7 @@
 import * as controllerUsuariosver1 from '../../controllers/ver1/controller_usuarios.js';
 import express from 'express';
 import { uploadUsuario } from '../../config/multer.js';
+import * as validator from '../../midlewares/validators/usuariosValidators.js';
 
 
 const routerv1usuarios = express.Router();
@@ -68,7 +69,9 @@ routerv1usuarios.get('/', controllerUsuariosver1.mostrarUsuarios);
  *       500:
  *         description: Error del servidor
  */
-routerv1usuarios.get('/:id', controllerUsuariosver1.mostrarUsuarioPorId);
+routerv1usuarios.get('/:id', 
+    validator.validarIdUsuario,
+    controllerUsuariosver1.mostrarUsuarioPorId);
 
 /**
  * @swagger
@@ -92,7 +95,9 @@ routerv1usuarios.get('/:id', controllerUsuariosver1.mostrarUsuarioPorId);
  *         description: Error del servidor
  */
 
-routerv1usuarios.delete('/:id', controllerUsuariosver1.eliminarUsuario);
+routerv1usuarios.delete('/:id', 
+    validator.validarIdUsuario,
+    controllerUsuariosver1.eliminarUsuario);
 
 /**
  * @swagger
@@ -116,7 +121,9 @@ routerv1usuarios.delete('/:id', controllerUsuariosver1.eliminarUsuario);
  *         description: Error del servidor
  */
 
-routerv1usuarios.patch('/:id/reactivar', controllerUsuariosver1.reactivarUsuario);
+routerv1usuarios.patch('/:id/reactivar', 
+    validator.validarIdUsuario,
+    controllerUsuariosver1.reactivarUsuario);
 
 
 /** * @swagger
@@ -158,7 +165,10 @@ routerv1usuarios.patch('/:id/reactivar', controllerUsuariosver1.reactivarUsuario
  *       500:
  *         description: Error del servidor
  */
-routerv1usuarios.put('/:id', controllerUsuariosver1.actualizarUsuario);
+routerv1usuarios.put('/:id', 
+    validator.validarIdUsuario,
+    validator.validarActualizacionUsuario,
+    controllerUsuariosver1.actualizarUsuario);
 
 /**
  * @swagger
@@ -190,7 +200,10 @@ routerv1usuarios.put('/:id', controllerUsuariosver1.actualizarUsuario);
  *           description: Error del servidor
  */
 
-routerv1usuarios.post('/crear', uploadUsuario.single('foto'), controllerUsuariosver1.nuevoUsuario);
+routerv1usuarios.post('/crear', 
+    uploadUsuario.single('foto'),
+    validator.validarNuevoUsuario,
+    controllerUsuariosver1.nuevoUsuario);
 
 /**
  *  @swagger
@@ -226,6 +239,9 @@ routerv1usuarios.post('/crear', uploadUsuario.single('foto'), controllerUsuarios
  *       500:
  *         description: Error del servidor
  */
-routerv1usuarios.patch('/:id/foto', uploadUsuario.single('foto'), controllerUsuariosver1.cambiarFotoUsuario);
+routerv1usuarios.patch('/:id/foto', 
+    uploadUsuario.single('foto'), 
+    validator.validarIdUsuario, 
+    controllerUsuariosver1.cambiarFotoUsuario);
 
 export default routerv1usuarios;
