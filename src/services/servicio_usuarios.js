@@ -74,9 +74,22 @@ export async function createUser(datos) {
     const contraseniaHasheada = await bcrypt.hash(contrasenia, salt);
 
     // 2. Lógica de nombre_usuario
-    const name = datos.nombre.toLowerCase();
-    const surname = datos.apellido.toLowerCase();
-    const nombre_usuario = name.slice(0, 3) + surname.slice(0, 3) + '@correo.com';
+    const name = nombre.toLowerCase();
+    const surname = apellido.toLowerCase();
+    let baseUsuario = name.slice(0, 3) + surname.slice(0, 3) + '@correo.com'; 
+    let nombre_usuario = baseUsuario; 
+    let contador = 1;
+
+    // Verificamos si ya existe
+    let usuarioExistente = await modeloUsuarios.buscarPorNombreUsuario(nombre_usuario);
+
+    // Si existe, añadimos un número y volvemos a verificar, hasta encontrar uno libre
+    while (usuarioExistente) {
+        const nombreBaseSinDominio = baseUsuario.split('@')[0];
+        nombre_usuario = `${nombreBaseSinDominio}${contador}@correo.com`;
+        usuarioExistente = await modeloUsuarios.buscarPorNombreUsuario(nombre_usuario);
+        contador++;
+    }
 
     // 3. Enviamos la contraseña hasheada al DAO
     await modeloUsuarios.crearUsuario({ 
