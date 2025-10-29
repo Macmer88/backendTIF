@@ -88,6 +88,8 @@ export async function crearSalon(datos) {
 }
 
 
+
+
 export async function obtenerSalonPorTitulo(titulo) {
     return await buscarPorTitulo(titulo);
 }
