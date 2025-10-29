@@ -6,7 +6,8 @@ export async function mostrarServicios(req, res, next) {
         page = 1,
         limit = 10,
         ordenar,
-        desc
+        desc,
+        buscar
     } = req.query;
 
     const estado = inactivos !== undefined ? 0 : 1;
@@ -19,7 +20,8 @@ export async function mostrarServicios(req, res, next) {
             ordenar,
             esDesc,
             parseInt(limit),
-            offset
+            offset,
+            buscar
         );
         res.status(200).json(resultado);
     } catch (error) {

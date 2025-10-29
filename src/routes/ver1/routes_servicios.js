@@ -1,7 +1,6 @@
 import express from 'express';
 import * as controller from '../../controllers/ver1/controller_servicios.js'
-// import { validarSalones, validarIdSalon } from '../../midlewares/validators/salonesValidators.js';
-// import { verificarSalonExistente } from '../../midlewares/specifics/midlewareSalones.js';
+import { validarServicio, validarIdServicio } from '../../midlewares/validators/serviciosValidators.js';
 
 const routerv1servicios = express.Router();
 
@@ -39,6 +38,11 @@ const routerv1servicios = express.Router();
  *         schema:
  *           type: integer
  *         description: Desplazamiento para paginación
+ *       - in: query
+ *         name: buscar
+ *         schema:
+ *           type: string
+ *         description: Término de búsqueda para filtrar por descripción
  *     responses:
  *       200:
  *         description: Lista de servicios obtenida correctamente
@@ -65,13 +69,15 @@ routerv1servicios.get('/', controller.mostrarServicios);
  *     responses:
  *       200:
  *         description: Servicio encontrado correctamente
+ *       400:
+ *         description: ID inválido
  *       404:
  *         description: Servicio no encontrado
  *       500:
  *         description: Error del servidor
  */
 
-routerv1servicios.get('/:id', controller.mostrarServicioPorId);
+routerv1servicios.get('/:id', validarIdServicio, controller.mostrarServicioPorId);
 
 /**
  * @swagger
@@ -101,16 +107,14 @@ routerv1servicios.get('/:id', controller.mostrarServicioPorId);
  *       200:
  *         description: Servicio actualizado correctamente
  *       400:
- *         description: Datos inválidos
+ *         description: Datos inválidos (errores de validación)
  *       404:
  *         description: Servicio no encontrado
- *       409:
- *         description: Ya existe un servicio activo con ese título
  *       500:
  *         description: Error del servidor
  */
 
-routerv1servicios.put('/:id', controller.updateServicio);
+routerv1servicios.put('/:id', validarIdServicio, validarServicio, controller.updateServicio);
 
 /**
  * @swagger
@@ -128,13 +132,15 @@ routerv1servicios.put('/:id', controller.updateServicio);
  *     responses:
  *       200:
  *         description: Servicio marcado como inactivo correctamente
+ *       400:
+ *         description: El servicio ya está inactivo
  *       404:
  *         description: Servicio no encontrado
  *       500:
  *         description: Error del servidor
  */
 
-routerv1servicios.delete('/:id', controller.borrarServicio);
+routerv1servicios.delete('/:id', validarIdServicio, controller.borrarServicio);
 
 /**
  * @swagger
@@ -152,13 +158,15 @@ routerv1servicios.delete('/:id', controller.borrarServicio);
  *     responses:
  *       200:
  *         description: Servicio reactivado correctamente
+ *       400:
+ *         description: El servicio ya está activo
  *       404:
  *         description: Servicio no encontrado
  *       500:
  *         description: Error del servidor
  */
 
-routerv1servicios.patch('/:id/reactivar', controller.volverServicioActivo);
+routerv1servicios.patch('/:id/reactivar', validarIdServicio,  controller.volverServicioActivo);
 
 /**
  * @swagger
@@ -181,16 +189,25 @@ routerv1servicios.patch('/:id/reactivar', controller.volverServicioActivo);
  *               importe:
  *                 type: number
  *     responses:
- *       201:
+ *       * 201:
  *         description: Servicio creado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Servicio creado con éxito"
+ *                 servicio_id:
+ *                   type: integer
+ *                   example: 15
  *       400:
  *         description: Datos inválidos
- *       409:
- *         description: Ya existe un servicio activo con ese título
  *       500:
  *         description: Error del servidor
  */
 
-routerv1servicios.post('/crear', controller.nuevoServicio);
+routerv1servicios.post('/crear', validarServicio, controller.nuevoServicio);
 
 export default routerv1servicios;
