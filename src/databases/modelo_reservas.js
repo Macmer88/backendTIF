@@ -47,18 +47,34 @@ export async function reactivateReserva(id){
 }
 
 
-export async function buscarUltId() {
-    const [rows] = await pool.query('SELECT reserva_id FROM reservas ORDER BY reserva_id DESC LIMIT 1');
-    return rows[0]?.reserva_id || 0;
+export async function createReserva(datos, connection) {
+    const { 
+        fecha_reserva, salon_id, usuario_id, turno_id, 
+        foto_cumpleaniero, tematica, importe_salon 
+    } = datos;
+
+    const query = `
+        INSERT INTO reservas 
+        (fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+    
+    const [result] = await connection.query(query, [
+        fecha_reserva, salon_id, usuario_id, turno_id, 
+        foto_cumpleaniero, tematica, importe_salon
+    ]);
+
+    return result.insertId;
 }
 
+/*
 export async function createReserva(datos) {
     const { reserva_id, fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total } = datos;
     await pool.query(
         'INSERT INTO reservas (reserva_id, fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?)',
         [reserva_id, fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon, importe_total]
     );
-}
+}*/
 
 export async function verificarDisponible(salon_id, fecha_reserva, turno_id) {
     const [rows] = await pool.query(
@@ -75,4 +91,24 @@ export async function actualizar(reserva_id, datosParaActualizar) {
         [nuevoNombreFoto, reserva_id]
     );
     return resultado;
+}
+
+
+export async function insertarServicioEnReserva(reserva_id, servicio_id, importe_servicio, connection) {
+    const query = `
+        INSERT INTO reservas_servicios 
+        (reserva_id, servicio_id, importe) 
+        VALUES (?, ?, ?)
+    `;
+    
+    // Usa la 'connection'
+    await connection.query(query, [reserva_id, servicio_id, importe_servicio]);
+}
+
+
+export async function actualizarImporteTotalReserva(reserva_id, importe_total, connection) {
+    const query = 'UPDATE reservas SET importe_total = ? WHERE reserva_id = ?';
+    
+    // Usa la 'connection'
+    await connection.query(query, [importe_total, reserva_id]);
 }

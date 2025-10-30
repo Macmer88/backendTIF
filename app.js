@@ -5,6 +5,7 @@ import routerv2salones from './src/routes/ver2/routes_salon.js';
 import routerv1usuarios from './src/routes/ver1/routes_usuariosver1.js';
 import routerv1reservas from './src/routes/ver1/routes_reservasv1.js';
 import routerv1servicios from './src/routes/ver1/routes_servicios.js';
+import routerv1turnos from './src/routes/ver1/routes_turnos.js';
 import corsMiddleware from './src/midlewares/global/corsconfig.js';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/docs/swaggerConfig.js';
@@ -29,6 +30,7 @@ app.use('/api/ver1/salones', routerv1salones);
 app.use('/api/ver1/reservas', routerv1reservas);
 app.use('/api/ver1/usuarios', routerv1usuarios);
 app.use('/api/ver1/servicios', routerv1servicios);
+app.use('/api/ver1/turnos', routerv1turnos);
 
 app.use('/api/ver2/salones', routerv2salones);
 

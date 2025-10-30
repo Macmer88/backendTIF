@@ -1,6 +1,6 @@
 import { pool } from '../config/db.js';
 
-export async function serviciosConFiltro(activo, ordenar, desc, limit, offset) {
+export async function serviciosConFiltro(activo, ordenar, desc, limit, offset, buscar) {
     let query = 'SELECT * FROM servicios WHERE activo = ?';
     const params = [activo];
 
@@ -8,6 +8,11 @@ export async function serviciosConFiltro(activo, ordenar, desc, limit, offset) {
     if (ordenar && columnasValidas.includes(ordenar)) {
         query += ` ORDER BY ${ordenar}`;
         if (desc) query += ' DESC';
+    }
+
+    if (buscar) {
+        query += ' AND descripcion LIKE ?';
+        params.push(`%${buscar}%`);
     }
 
     query += ' LIMIT ? OFFSET ?';

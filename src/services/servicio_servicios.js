@@ -2,8 +2,8 @@ import createError from 'http-errors';
 import * as modeloServicios from '../databases/modelo_servicios.js';
 
 
-export async function fetchServicios(activo,ordenar,desc,limit,offset) {
-    return await modeloServicios.serviciosConFiltro(activo,ordenar,desc,limit,offset);
+export async function fetchServicios(activo,ordenar,desc,limit,offset, buscar) {
+    return await modeloServicios.serviciosConFiltro(activo,ordenar,desc,limit,offset, buscar);
 }
 
 export async function fetchServicioById(id){
