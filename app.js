@@ -2,9 +2,15 @@ import express from 'express';
 import setupHandlebars from './src/config/handlebars.js';
 import routerv1salones from './src/routes/ver1/routes_salonv1.js';
 import routerv2salones from './src/routes/ver2/routes_salon.js';
+import routerv1usuarios from './src/routes/ver1/routes_usuariosver1.js';
 import routerv1reservas from './src/routes/ver1/routes_reservasv1.js';
+<<<<<<< HEAD
 import routerv1reservas_salones from './src/routes/ver1/routes_reservasv1.js';
 //import routesReservasServicios from './src/routes/ver1/routes_reservas_servicios.js';
+=======
+import routerv1servicios from './src/routes/ver1/routes_servicios.js';
+import routerv1turnos from './src/routes/ver1/routes_turnos.js';
+>>>>>>> main
 import corsMiddleware from './src/midlewares/global/corsconfig.js';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/docs/swaggerConfig.js';
@@ -27,14 +33,21 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(helmet());
 app.use('/api/ver1/salones', routerv1salones);
 app.use('/api/ver1/reservas', routerv1reservas);
+<<<<<<< HEAD
 app.use('/api/ver1/reservas_salones', routerv1reservas_salones);
 //app.use('/api/ver1/reservas_servicios', routesReservasServicios);
+=======
+app.use('/api/ver1/usuarios', routerv1usuarios);
+app.use('/api/ver1/servicios', routerv1servicios);
+app.use('/api/ver1/turnos', routerv1turnos);
+>>>>>>> main
 
 app.use('/api/ver2/salones', routerv2salones);
 
 app.use(notFound);
 
 app.use(errorHandler);
+
 
 app.listen(port, () => {
     console.log(`escuchando en http://localhost:${port}`);

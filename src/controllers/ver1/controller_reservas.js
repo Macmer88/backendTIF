@@ -1,6 +1,7 @@
 import * as servicioReservas from '../../services/servicio_reservas.js';
+import { deleteImage } from '../../utils/fileutils.js';
 
-export async function mostrarReservas(req, res) {
+export async function mostrarReservas(req, res, next) {
     const {
         inactivos,
         page = 1,
@@ -23,22 +24,22 @@ export async function mostrarReservas(req, res) {
         );
         res.json(reservas);
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener reservas' });
+        next(error);
     }
 }
 
-export async function mostrarReservasPorId(req, res) {
+export async function mostrarReservasPorId(req, res, next) {
     const { id } = req.params;
     
     try {
         const reservas = await servicioReservas.reservasById(id);
         res.json(reservas);
     } catch (error) {
-        res.status(404).json({ error: error.message });
+        next(error);
     }
 }
 
-export async function updateReserva(req, res) {
+export async function updateReserva(req, res, next) {
     try {
         console.log("ID:", req.params.id);
         console.log("Body:", req.body);
@@ -46,42 +47,30 @@ export async function updateReserva(req, res) {
         await servicioReservas.modificarReserva(req.params.id, req.body);
         res.json({ message: 'Reserva actualizada' });
     } catch (err) {
-        console.error("Error en updateReserva:", err.message);
-        res.status(500).json({ error: 'Error al actualizar' });
+    next(err);
     }
 }
 
-export async function borrarReserva(req, res){
+export async function borrarReserva(req, res, next){
     try{
         await servicioReservas.eliminarReserva(req.params.id);
         res.json({mensaje: 'Reserva eliminada'});
     }catch(err){
-        console.error("Error en borrarReserva:", err.message);
-        res.status(500).json({error: 'Error al eliminar'});
+        next(err);
     };
 }
 
-export async function volverReservaActiva(req, res){
+export async function volverReservaActiva(req, res, next){
     try{
         const resultado = await servicioReservas.reactivarReserva(req.params.id);
         res.status(201).json(resultado);
     }catch(err){
-        console.error("Error en reactivarReserva:", err.message);
-        res.status(500).json({error: 'Error al reactivar'});
+        next(err);
     };
 }
 
-/*export async function nuevaReserva(req, res){
-    try{
-        const resultado = await servicioReservas.crearReserva(req.body);
-        res.status(201).json(resultado);
-    }catch(err){
-        console.error("Error en crearReserva:", err.message);
-        res.status(500).json({error: 'Error al crear'});
-    }
-}*/
 
-export async function nuevaReserva(req, res, next){ // Usamos next para el manejo de errores
+export async function nuevaReserva(req, res, next){ 
     try{
         // 1. Extraemos los datos de texto del body
         const datosDelBody = req.body;
@@ -97,7 +86,7 @@ export async function nuevaReserva(req, res, next){ // Usamos next para el manej
         // 3. Creamos el objeto de datos COMPLETO para el servicio
         const datosCompletos = {
             ...datosDelBody, // Copiamos todos los campos de texto
-            foto_cumpleaniero: req.file.path // Añadimos la ruta del archivo
+            foto_cumpleaniero: req.file.filename // Añadimos elnombre del archivo
         };
 
         // 4. Llamamos al servicio con el objeto ya unificado
@@ -109,3 +98,28 @@ export async function nuevaReserva(req, res, next){ // Usamos next para el manej
         next(err); 
     }
 }
+
+// Controlador para cambiar la foto del cumpleañero
+
+
+export const cambiarFotoCumpleaniero = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        if (!req.file) {
+            return res.status(400).json({ msg: 'No se ha subido ningún archivo de imagen.' });
+        }
+
+        const reservaActualizada = await servicioReservas.cambiarFoto(id, req.file);
+
+        res.status(200).json({
+            msg: 'La foto fue actualizada con éxito.',
+            reserva: reservaActualizada,
+        });
+    } catch (error) {
+        if (req.file) {
+            await deleteImage(req.file.filename);
+        }
+
+        next(error);
+    }
+};
