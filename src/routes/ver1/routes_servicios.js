@@ -172,7 +172,7 @@ routerv1servicios.patch('/:id/reactivar', validarIdServicio,  controller.volverS
  * @swagger
  * /api/ver1/servicios/crear:
  *   post:
- *     summary: Crear un nuevo servicio
+ *     summary: "Crear un nuevo servicio"
  *     tags: [Servicios]
  *     requestBody:
  *       required: true
@@ -189,8 +189,8 @@ routerv1servicios.patch('/:id/reactivar', validarIdServicio,  controller.volverS
  *               importe:
  *                 type: number
  *     responses:
- *       * 201:
- *         description: Servicio creado correctamente
+ *       "201":
+ *         description: "Servicio creado correctamente"
  *         content:
  *           application/json:
  *             schema:
@@ -202,10 +202,10 @@ routerv1servicios.patch('/:id/reactivar', validarIdServicio,  controller.volverS
  *                 servicio_id:
  *                   type: integer
  *                   example: 15
- *       400:
- *         description: Datos inválidos
- *       500:
- *         description: Error del servidor
+ *       "400":
+ *         description: "Datos inválidos"
+ *       "500":
+ *         description: "Error del servidor"
  */
 
 routerv1servicios.post('/crear', validarServicio, controller.nuevoServicio);

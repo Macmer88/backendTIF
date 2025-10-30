@@ -3,14 +3,13 @@ import express from 'express';
 import { uploadUsuario } from '../../config/multer.js';
 import * as validator from '../../midlewares/validators/usuariosValidators.js';
 
-
 const routerv1usuarios = express.Router();
 
 /**
  * @swagger
  * /api/ver1/usuarios:
  *   get:
- *     summary: Obtener todos los usuarios (con filtros opcionales)
+ *     summary: "Obtener todos los usuarios (con filtros opcionales)"
  *     tags: [Usuarios]
  *     parameters:
  *       - in: query
@@ -18,33 +17,33 @@ const routerv1usuarios = express.Router();
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Filtrar por estado activo (1 = activo, 0 = inactivo)
+ *         description: "Filtrar por estado activo (1 = activo, 0 = inactivo)"
  *       - in: query
  *         name: ordenar
  *         schema:
  *           type: string
  *           enum: [usuario_id, nombre, apellido, tipo_usuario]
- *         description: Campo por el cual ordenar los resultados
+ *         description: "Campo por el cual ordenar los resultados"
  *       - in: query
  *         name: desc
  *         schema:
  *           type: boolean
- *         description: Orden descendente si es true
+ *         description: "Orden descendente si es true"
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *         description: Cantidad máxima de resultados
+ *         description: "Cantidad máxima de resultados"
  *       - in: query
  *         name: offset
  *         schema:
  *           type: integer
- *         description: Desplazamiento para paginación
+ *         description: "Desplazamiento para paginación"
  *     responses:
- *       200:
- *         description: Lista de usuarios obtenida correctamente
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Lista de usuarios obtenida correctamente"
+ *       "500":
+ *         description: "Error del servidor"
  */
 routerv1usuarios.get('/', controllerUsuariosver1.mostrarUsuarios);
 
@@ -52,7 +51,7 @@ routerv1usuarios.get('/', controllerUsuariosver1.mostrarUsuarios);
  * @swagger
  * /api/ver1/usuarios/{id}:
  *   get:
- *     summary: Obtener un usuario por ID
+ *     summary: "Obtener un usuario por ID"
  *     tags: [Usuarios]
  *     parameters:
  *       - in: path
@@ -60,16 +59,16 @@ routerv1usuarios.get('/', controllerUsuariosver1.mostrarUsuarios);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del usuario
+ *         description: "ID del usuario"
  *     responses:
- *       200:
- *         description: Usuario obtenido correctamente
- *       404:
- *         description: Usuario no encontrado
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Usuario obtenido correctamente"
+ *       "404":
+ *         description: "Usuario no encontrado"
+ *       "500":
+ *         description: "Error del servidor"
  */
-routerv1usuarios.get('/:id', 
+routerv1usuarios.get('/:id',
     validator.validarIdUsuario,
     controllerUsuariosver1.mostrarUsuarioPorId);
 
@@ -77,7 +76,7 @@ routerv1usuarios.get('/:id',
  * @swagger
  * /api/ver1/usuarios/{id}:
  *   delete:
- *     summary: Soft delete de un usuario por ID
+ *     summary: "Soft delete de un usuario por ID"
  *     tags: [Usuarios]
  *     parameters:
  *       - in: path
@@ -85,17 +84,16 @@ routerv1usuarios.get('/:id',
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del usuario
+ *         description: "ID del usuario"
  *     responses:
- *       200:
- *         description: Usuario eliminado correctamente
- *       404:
- *         description: Usuario no encontrado
- *       500:   
- *         description: Error del servidor
+ *       "200":
+ *         description: "Usuario eliminado correctamente"
+ *       "404":
+ *         description: "Usuario no encontrado"
+ *       "500":
+ *         description: "Error del servidor"
  */
-
-routerv1usuarios.delete('/:id', 
+routerv1usuarios.delete('/:id',
     validator.validarIdUsuario,
     controllerUsuariosver1.eliminarUsuario);
 
@@ -103,33 +101,7 @@ routerv1usuarios.delete('/:id',
  * @swagger
  * /api/ver1/usuarios/{id}/reactivar:
  *   patch:
- *     summary: Reactivar un usuario por ID
- *     tags: [Usuarios]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *         type: string
- *         description: ID del usuario      
- *     responses:
- *       200:
- *         description: Usuario reactivado correctamente
- *       404: 
- *         description: Usuario no encontrado
- *       500:    
- *         description: Error del servidor
- */
-
-routerv1usuarios.patch('/:id/reactivar', 
-    validator.validarIdUsuario,
-    controllerUsuariosver1.reactivarUsuario);
-
-
-/** * @swagger
- * /api/ver1/usuarios/{id}:
- *   put:
- *     summary: Actualizar un usuario por ID
+ *     summary: "Reactivar un usuario por ID"
  *     tags: [Usuarios]
  *     parameters:
  *       - in: path
@@ -137,7 +109,32 @@ routerv1usuarios.patch('/:id/reactivar',
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del usuario
+ *         description: "ID del usuario"
+ *     responses:
+ *       "200":
+ *         description: "Usuario reactivado correctamente"
+ *       "404":
+ *         description: "Usuario no encontrado"
+ *       "500":
+ *         description: "Error del servidor"
+ */
+routerv1usuarios.patch('/:id/reactivar',
+    validator.validarIdUsuario,
+    controllerUsuariosver1.reactivarUsuario);
+
+/**
+ * @swagger
+ * /api/ver1/usuarios/{id}:
+ *   put:
+ *     summary: "Actualizar un usuario por ID"
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: "ID del usuario"
  *     requestBody:
  *       required: true
  *       content:
@@ -156,16 +153,16 @@ routerv1usuarios.patch('/:id/reactivar',
  *               celular:
  *                 type: string
  *     responses:
- *       200:
- *         description: Usuario actualizado correctamente
- *       400:
- *         description: Faltan campos obligatorios
- *       404:
- *         description: Usuario no encontrado
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Usuario actualizado correctamente"
+ *       "400":
+ *         description: "Faltan campos obligatorios"
+ *       "404":
+ *         description: "Usuario no encontrado"
+ *       "500":
+ *         description: "Error del servidor"
  */
-routerv1usuarios.put('/:id', 
+routerv1usuarios.put('/:id',
     validator.validarIdUsuario,
     validator.validarActualizacionUsuario,
     controllerUsuariosver1.actualizarUsuario);
@@ -174,42 +171,41 @@ routerv1usuarios.put('/:id',
  * @swagger
  * /api/ver1/usuarios/crear:
  *   post:
- *     summary: Crear un nuevo usuario
+ *     summary: "Crear un nuevo usuario"
  *     tags: [Usuarios]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
- *           schema:                        
- *            type: object
- *            properties:
- *              nombre:
- *                type: string
- *              apellido:
- *                type: string  
- *              contrasenia:
- *                type: string
- *              tipo_usuario:
- *                type: number
- *              celular:
- *                type: number
- *       responses:
- *         200:
- *           description: Usuario creado correctamente
- *         500:
- *           description: Error del servidor
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               apellido:
+ *                 type: string
+ *               contrasenia:
+ *                 type: string
+ *               tipo_usuario:
+ *                 type: number
+ *               celular:
+ *                 type: number
+ *     responses:
+ *       "201":
+ *         description: "Usuario creado correctamente"
+ *       "500":
+ *         description: "Error del servidor"
  */
-
-routerv1usuarios.post('/crear', 
+routerv1usuarios.post('/crear',
     uploadUsuario.single('foto'),
     validator.validarNuevoUsuario,
     controllerUsuariosver1.nuevoUsuario);
 
 /**
- *  @swagger
+ * @swagger
  * /api/ver1/usuarios/{id}/foto:
  *   patch:
- *     summary: Cambiar la foto de un usuario por ID
+ *     summary: "Cambiar la foto de un usuario por ID"
  *     tags: [Usuarios]
  *     parameters:
  *       - in: path
@@ -217,31 +213,31 @@ routerv1usuarios.post('/crear',
  *         required: true
  *         schema:
  *           type: number
- *         description: ID del usuario
+ *         description: "ID del usuario"
  *     requestBody:
- *      required: true  
- *     content:
- *      multipart/form-data:
- *       schema:
- *        type: object
- *        properties:
- *         foto:
- *          type: string
- *          format: binary
- *     description: Nueva foto del usuario
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               foto:
+ *                 type: string
+ *                 format: binary
+ *                 description: "Nueva foto del usuario"
  *     responses:
- *       200:
- *         description: Foto del usuario actualizada correctamente
- *       400:   
- *         description: No se proporcionó una foto
- *       404:
- *         description: Usuario no encontrado
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Foto del usuario actualizada correctamente"
+ *       "400":
+ *         description: "No se proporcionó una foto"
+ *       "404":
+ *         description: "Usuario no encontrado"
+ *       "500":
+ *         description: "Error del servidor"
  */
-routerv1usuarios.patch('/:id/foto', 
-    uploadUsuario.single('foto'), 
-    validator.validarIdUsuario, 
+routerv1usuarios.patch('/:id/foto',
+    uploadUsuario.single('foto'),
+    validator.validarIdUsuario,
     controllerUsuariosver1.cambiarFotoUsuario);
 
 export default routerv1usuarios;

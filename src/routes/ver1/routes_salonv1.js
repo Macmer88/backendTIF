@@ -9,7 +9,7 @@ const routerv1salones = express.Router();
  * @swagger
  * /api/ver1/salones:
  *   get:
- *     summary: Obtener todos los salones (con filtros opcionales)
+ *     summary: "Obtener todos los salones (con filtros opcionales)"
  *     tags: [Salones]
  *     parameters:
  *       - in: query
@@ -17,43 +17,41 @@ const routerv1salones = express.Router();
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Filtrar por estado activo (1 = activo, 0 = inactivo)
+ *         description: "Filtrar por estado activo (1 = activo, 0 = inactivo)"
  *       - in: query
  *         name: ordenar
  *         schema:
  *           type: string
  *           enum: [capacidad, importe, titulo]
- *         description: Campo por el cual ordenar los resultados
+ *         description: "Campo por el cual ordenar los resultados"
  *       - in: query
  *         name: desc
  *         schema:
  *           type: boolean
- *         description: Orden descendente si es true
+ *         description: "Orden descendente si es true"
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *         description: Cantidad máxima de resultados
+ *         description: "Cantidad máxima de resultados"
  *       - in: query
  *         name: offset
  *         schema:
  *           type: integer
- *         description: Desplazamiento para paginación
+ *         description: "Desplazamiento para paginación"
  *     responses:
- *       200:
- *         description: Lista de salones obtenida correctamente
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Lista de salones obtenida correctamente"
+ *       "500":
+ *         description: "Error del servidor"
  */
-
-
 routerv1salones.get('/', mostrarSalones);
 
 /**
  * @swagger
  * /api/ver1/salones/{id}:
  *   get:
- *     summary: Obtener un salón por ID
+ *     summary: "Obtener un salón por ID"
  *     tags: [Salones]
  *     parameters:
  *       - in: path
@@ -61,23 +59,22 @@ routerv1salones.get('/', mostrarSalones);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del salón a buscar
+ *         description: "ID del salón a buscar"
  *     responses:
- *       200:
- *         description: Salón encontrado correctamente
- *       404:
- *         description: Salón no encontrado
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Salón encontrado correctamente"
+ *       "404":
+ *         description: "Salón no encontrado"
+ *       "500":
+ *         description: "Error del servidor"
  */
-
-routerv1salones.get('/:id', validarIdSalon,mostrarSalonPorId);
+routerv1salones.get('/:id', validarIdSalon, mostrarSalonPorId);
 
 /**
  * @swagger
  * /api/ver1/salones/{id}:
  *   put:
- *     summary: Actualizar un salón por ID
+ *     summary: "Actualizar un salón por ID"
  *     tags: [Salones]
  *     parameters:
  *       - in: path
@@ -85,7 +82,7 @@ routerv1salones.get('/:id', validarIdSalon,mostrarSalonPorId);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del salón a actualizar
+ *         description: "ID del salón a actualizar"
  *     requestBody:
  *       required: true
  *       content:
@@ -104,25 +101,24 @@ routerv1salones.get('/:id', validarIdSalon,mostrarSalonPorId);
  *               importe:
  *                 type: number
  *     responses:
- *       200:
- *         description: Salón actualizado correctamente
- *       400:
- *         description: Datos inválidos
- *       404:
- *         description: Salón no encontrado
- *       409:
- *         description: Ya existe un salón activo con ese título
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Salón actualizado correctamente"
+ *       "400":
+ *         description: "Datos inválidos"
+ *       "404":
+ *         description: "Salón no encontrado"
+ *       "409":
+ *         description: "Ya existe un salón activo con ese título"
+ *       "500":
+ *         description: "Error del servidor"
  */
-
-routerv1salones.put('/:id', validarIdSalon,validarSalones, updateSalon);
+routerv1salones.put('/:id', validarIdSalon, validarSalones, updateSalon);
 
 /**
  * @swagger
  * /api/ver1/salones/{id}:
  *   delete:
- *     summary: Realizar baja lógica de un salón por ID
+ *     summary: "Realizar baja lógica de un salón por ID"
  *     tags: [Salones]
  *     parameters:
  *       - in: path
@@ -130,23 +126,22 @@ routerv1salones.put('/:id', validarIdSalon,validarSalones, updateSalon);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del salón a dar de baja
+ *         description: "ID del salón a dar de baja"
  *     responses:
- *       200:
- *         description: Salón marcado como inactivo correctamente
- *       404:
- *         description: Salón no encontrado
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Salón marcado como inactivo correctamente"
+ *       "404":
+ *         description: "Salón no encontrado"
+ *       "500":
+ *         description: "Error del servidor"
  */
-
-routerv1salones.delete('/:id', validarIdSalon,borrarSalon);
+routerv1salones.delete('/:id', validarIdSalon, borrarSalon);
 
 /**
  * @swagger
  * /api/ver1/salones/{id}/reactivar:
  *   patch:
- *     summary: Reactivar un salón previamente dado de baja
+ *     summary: "Reactivar un salón previamente dado de baja"
  *     tags: [Salones]
  *     parameters:
  *       - in: path
@@ -154,23 +149,22 @@ routerv1salones.delete('/:id', validarIdSalon,borrarSalon);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del salón a reactivar
+ *         description: "ID del salón a reactivar"
  *     responses:
- *       200:
- *         description: Salón reactivado correctamente
- *       404:
- *         description: Salón no encontrado
- *       500:
- *         description: Error del servidor
+ *       "200":
+ *         description: "Salón reactivado correctamente"
+ *       "404":
+ *         description: "Salón no encontrado"
+ *       "500":
+ *         description: "Error del servidor"
  */
-
 routerv1salones.patch('/:id/reactivar', validarIdSalon, verificarSalonExistente, volverSalonActivo);
 
 /**
  * @swagger
  * /api/ver1/salones/crear:
  *   post:
- *     summary: Crear un nuevo salón
+ *     summary: "Crear un nuevo salón"
  *     tags: [Salones]
  *     requestBody:
  *       required: true
@@ -193,16 +187,15 @@ routerv1salones.patch('/:id/reactivar', validarIdSalon, verificarSalonExistente,
  *               importe:
  *                 type: number
  *     responses:
- *       201:
- *         description: Salón creado correctamente
- *       400:
- *         description: Datos inválidos
- *       409:
- *         description: Ya existe un salón activo con ese título
- *       500:
- *         description: Error del servidor
+ *       "201":
+ *         description: "Salón creado correctamente"
+ *       "400":
+ *         description: "Datos inválidos"
+ *       "409":
+ *         description: "Ya existe un salón activo con ese título"
+ *       "500":
+ *         description: "Error del servidor"
  */
-
 routerv1salones.post('/crear', validarSalones, verificarSalonExistente, nuevoSalon);
 
 export default routerv1salones;

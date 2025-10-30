@@ -9,7 +9,7 @@ const routerv1reservas = express.Router();
  * @swagger
  * /api/ver1/reservas:
  *   get:
- *     summary: Obtener todas las reservas (con filtros opcionales)
+ *     summary: "Obtener todas las reservas (con filtros opcionales)"
  *     tags: [Reservas]
  *     parameters:
  *       - in: query
@@ -17,43 +17,41 @@ const routerv1reservas = express.Router();
  *         schema:
  *           type: integer
  *           enum: [0, 1]
- *         description: Filtrar por estado activo (1 = activo, 0 = inactivo)
+ *         description: "Filtrar por estado activo (1 = activo, 0 = inactivo)"
  *       - in: query
  *         name: ordenar
  *         schema:
  *           type: string
  *           enum: [reserva_id, importe, fecha_reserva, creado, importe_total]
- *         description: Campo por el cual ordenar los resultados
+ *         description: "Campo por el cual ordenar los resultados"
  *       - in: query
  *         name: desc
  *         schema:
  *           type: boolean
- *         description: Orden descendente si es true
+ *         description: "Orden descendente si es true"
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *         description: Cantidad máxima de resultados
+ *         description: "Cantidad máxima de resultados"
  *       - in: query
  *         name: offset
  *         schema:
  *           type: integer
- *         description: Desplazamiento para paginación
+ *         description: "Desplazamiento para paginación"
  *     responses:
  *       "200":
- *         description: Lista de reservas obtenida correctamente
+ *         description: "Lista de reservas obtenida correctamente"
  *       "500":
- *         description: Error del servidor
+ *         description: "Error del servidor"
  */
-
-
 routerv1reservas.get('/', controladoresReservas.mostrarReservas);
 
 /**
  * @swagger
  * /api/ver1/reservas/{id}:
  *   get:
- *     summary: Obtener una reserva por ID
+ *     summary: "Obtener una reserva por ID"
  *     tags: [Reservas]
  *     parameters:
  *       - in: path
@@ -61,23 +59,22 @@ routerv1reservas.get('/', controladoresReservas.mostrarReservas);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la reserva a buscar
+ *         description: "ID de la reserva a buscar"
  *     responses:
  *       "200":
- *         description: Reserva encontrada correctamente
+ *         description: "Reserva encontrada correctamente"
  *       "404":
- *         description: Reserva no encontrada
+ *         description: "Reserva no encontrada"
  *       "500":
- *         description: Error del servidor
+ *         description: "Error del servidor"
  */
-
 routerv1reservas.get('/:id', controladoresReservas.mostrarReservasPorId);
 
 /**
  * @swagger
  * /api/ver1/reservas/{id}:
  *   put:
- *     summary: Actualizar una reserva por ID
+ *     summary: "Actualizar una reserva por ID"
  *     tags: [Reservas]
  *     parameters:
  *       - in: path
@@ -85,7 +82,7 @@ routerv1reservas.get('/:id', controladoresReservas.mostrarReservasPorId);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la reserva a actualizar
+ *         description: "ID de la reserva a actualizar"
  *     requestBody:
  *       required: true
  *       content:
@@ -94,32 +91,31 @@ routerv1reservas.get('/:id', controladoresReservas.mostrarReservasPorId);
  *             type: object
  *             properties:
  *               fecha_reserva:
- *                type: string
- *                format: date-time
+ *                 type: string
+ *                 format: date
  *               salon_id:
- *                type: integer
+ *                 type: integer
  *               turno_id:
- *                type: integer
- *               importe_total: 
- *                type: number
+ *                 type: integer
+ *               importe_total:
+ *                 type: number
  *     responses:
  *       "200":
- *         description: Reserva actualizada correctamente
+ *         description: "Reserva actualizada correctamente"
  *       "400":
- *         description: Datos inválidos
+ *         description: "Datos inválidos"
  *       "404":
- *         description: Reserva no encontrada
+ *         description: "Reserva no encontrada"
  *       "500":
- *         description: Error del servidor
+ *         description: "Error del servidor"
  */
-
 routerv1reservas.put('/:id', validatorsReservas.validarIdReserva, validatorsReservas.validarReservas, controladoresReservas.updateReserva);
 
 /**
  * @swagger
  * /api/ver1/reservas/{id}:
  *   delete:
- *     summary: Realizar baja lógica de una reserva por ID
+ *     summary: "Realizar baja lógica de una reserva por ID"
  *     tags: [Reservas]
  *     parameters:
  *       - in: path
@@ -127,23 +123,22 @@ routerv1reservas.put('/:id', validatorsReservas.validarIdReserva, validatorsRese
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la reserva a dar de baja
+ *         description: "ID de la reserva a dar de baja"
  *     responses:
  *       "200":
- *         description: Reserva marcada como inactiva correctamente
+ *         description: "Reserva marcada como inactiva correctamente"
  *       "404":
- *         description: Reserva no encontrada
+ *         description: "Reserva no encontrada"
  *       "500":
- *         description: Error del servidor
+ *         description: "Error del servidor"
  */
-
 routerv1reservas.delete('/:id', validatorsReservas.validarIdReserva, controladoresReservas.borrarReserva);
 
 /**
  * @swagger
  * /api/ver1/reservas/{id}/reactivar:
  *   patch:
- *     summary: Reactivar una reserva previamente dada de baja
+ *     summary: "Reactivar una reserva previamente dada de baja"
  *     tags: [Reservas]
  *     parameters:
  *       - in: path
@@ -151,19 +146,17 @@ routerv1reservas.delete('/:id', validatorsReservas.validarIdReserva, controlador
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la reserva a reactivar
+ *         description: "ID de la reserva a reactivar"
  *     responses:
  *       "200":
- *         description: Reserva reactivada correctamente
+ *         description: "Reserva reactivada correctamente"
  *       "404":
- *         description: Reserva no encontrada
+ *         description: "Reserva no encontrada"
  *       "500":
- *         description: Error del servidor
+ *         description: "Error del servidor"
  */
-
 routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, controladoresReservas.volverReservaActiva);
 
-// ...existing code...
 /**
  * @swagger
  * /api/ver1/reservas/crear:
@@ -260,9 +253,7 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
  *       "500":
  *         description: "Error del servidor"
  */
-
-routerv1reservas.post('/crear',   uploadCumpleanero.single('foto_cumpleaniero'), validatorsReservas.validarReservas, midlewareReservas.estaDisponible, controladoresReservas.nuevaReserva);
-
+routerv1reservas.post('/crear', uploadCumpleanero.single('foto_cumpleaniero'), validatorsReservas.validarReservas, midlewareReservas.estaDisponible, controladoresReservas.nuevaReserva);
 
 /**
  * @swagger
@@ -301,10 +292,7 @@ routerv1reservas.post('/crear',   uploadCumpleanero.single('foto_cumpleaniero'),
  *       "500":
  *         description: "Error del servidor"
  */
-
 routerv1reservas.patch('/foto/:id', validatorsReservas.validarIdReserva, uploadCumpleanero.single('foto_cumpleaniero'), controladoresReservas.cambiarFotoCumpleaniero);
-
-
 
 export default routerv1reservas;
 
