@@ -50,7 +50,7 @@ export async function reactivateSalon(id){
 export async function createSalon(datos) {
     const {titulo, direccion, capacidad, importe } = datos;
     await pool.query(
-        'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?, ?, ?, ?)',
         [titulo, direccion, capacidad, importe]
     );
 }
