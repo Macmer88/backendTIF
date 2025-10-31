@@ -7,6 +7,8 @@ import routerv1reservas from './src/routes/ver1/routes_reservasv1.js';
 import routerv1servicios from './src/routes/ver1/routes_servicios.js';
 import routerv1turnos from './src/routes/ver1/routes_turnos.js';
 import corsMiddleware from './src/midlewares/global/corsconfig.js';
+import passport from 'passport';
+import configurePassport from './src/config/passport.js';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/docs/swaggerConfig.js';
 import helmet from 'helmet';
@@ -22,6 +24,8 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use(logger);
 
+app.use(passport.initialize());
+configurePassport(passport);
 
 app.use(express.static('src/public'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
