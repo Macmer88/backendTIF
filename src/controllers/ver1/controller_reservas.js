@@ -30,9 +30,10 @@ export async function mostrarReservas(req, res, next) {
 
 export async function mostrarReservasPorId(req, res, next) {
     const { id } = req.params;
+    const usuarioAutenticado = req.user;
     
     try {
-        const reservas = await servicioReservas.reservasById(id);
+        const reservas = await servicioReservas.reservasById(id, usuarioAutenticado); 
         res.json(reservas);
     } catch (error) {
         next(error);
@@ -86,7 +87,8 @@ export async function nuevaReserva(req, res, next){
         // 3. Creamos el objeto de datos COMPLETO para el servicio
         const datosCompletos = {
             ...datosDelBody, // Copiamos todos los campos de texto
-            foto_cumpleaniero: req.file.filename // Añadimos elnombre del archivo
+            foto_cumpleaniero: req.file.filename, // Añadimos elnombre del archivo
+            usuario_id: req.user.usuario_id
         };
 
         // 4. Llamamos al servicio con el objeto ya unificado
@@ -105,11 +107,14 @@ export async function nuevaReserva(req, res, next){
 export const cambiarFotoCumpleaniero = async (req, res, next) => {
     try {
         const { id } = req.params;
+        const usuarioAutenticado = req.user; // <-- Obtenemos el usuario del token
+        
         if (!req.file) {
             return res.status(400).json({ msg: 'No se ha subido ningún archivo de imagen.' });
         }
-
-        const reservaActualizada = await servicioReservas.cambiarFoto(id, req.file);
+        
+        // Pasamos el ID, el archivo y el usuario al servicio
+        const reservaActualizada = await servicioReservas.cambiarFoto(id, req.file, usuarioAutenticado);
 
         res.status(200).json({
             msg: 'La foto fue actualizada con éxito.',
@@ -119,7 +124,6 @@ export const cambiarFotoCumpleaniero = async (req, res, next) => {
         if (req.file) {
             await deleteImage(req.file.filename);
         }
-
         next(error);
     }
 };

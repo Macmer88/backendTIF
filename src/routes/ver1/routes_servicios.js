@@ -1,4 +1,6 @@
 import express from 'express';
+import passport from 'passport';
+import { esRol } from '../../midlewares/global/role_handler.js';
 import * as controller from '../../controllers/ver1/controller_servicios.js'
 import { validarServicio, validarIdServicio } from '../../midlewares/validators/serviciosValidators.js';
 
@@ -51,7 +53,9 @@ const routerv1servicios = express.Router();
  */
 
 
-routerv1servicios.get('/', controller.mostrarServicios);
+routerv1servicios.get('/', passport.authenticate('jwt', { session: false }),
+    esRol(1, 2, 3),
+    controller.mostrarServicios);
 
 /**
  * @swagger
@@ -77,7 +81,9 @@ routerv1servicios.get('/', controller.mostrarServicios);
  *         description: Error del servidor
  */
 
-routerv1servicios.get('/:id', validarIdServicio, controller.mostrarServicioPorId);
+routerv1servicios.get('/:id', passport.authenticate('jwt', { session: false }),
+    esRol(1, 2, 3),validarIdServicio,
+    controller.mostrarServicioPorId);
 
 /**
  * @swagger
@@ -114,7 +120,10 @@ routerv1servicios.get('/:id', validarIdServicio, controller.mostrarServicioPorId
  *         description: Error del servidor
  */
 
-routerv1servicios.put('/:id', validarIdServicio, validarServicio, controller.updateServicio);
+routerv1servicios.put('/:id', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),
+    validarIdServicio, validarServicio, controller.updateServicio);
 
 /**
  * @swagger
@@ -140,7 +149,10 @@ routerv1servicios.put('/:id', validarIdServicio, validarServicio, controller.upd
  *         description: Error del servidor
  */
 
-routerv1servicios.delete('/:id', validarIdServicio, controller.borrarServicio);
+routerv1servicios.delete('/:id', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),
+    validarIdServicio, controller.borrarServicio);
 
 /**
  * @swagger
@@ -166,7 +178,10 @@ routerv1servicios.delete('/:id', validarIdServicio, controller.borrarServicio);
  *         description: Error del servidor
  */
 
-routerv1servicios.patch('/:id/reactivar', validarIdServicio,  controller.volverServicioActivo);
+routerv1servicios.patch('/:id/reactivar', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),
+    validarIdServicio,  controller.volverServicioActivo);
 
 /**
  * @swagger
@@ -208,6 +223,8 @@ routerv1servicios.patch('/:id/reactivar', validarIdServicio,  controller.volverS
  *         description: "Error del servidor"
  */
 
-routerv1servicios.post('/crear', validarServicio, controller.nuevoServicio);
+routerv1servicios.post('/crear', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),validarServicio, controller.nuevoServicio);
 
 export default routerv1servicios;

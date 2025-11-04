@@ -59,6 +59,6 @@ export async function actualizar(usuario_id, datosParaActualizar) {
 
 
 export async function buscarPorNombreUsuario(nombre_usuario){
-    const [rows] = await pool.query('SELECT 1 FROM usuarios WHERE nombre_usuario = ?', [nombre_usuario]);
+    const [rows] = await pool.query('SELECT * FROM usuarios WHERE nombre_usuario = ?', [nombre_usuario]);
     return rows[0];
 }

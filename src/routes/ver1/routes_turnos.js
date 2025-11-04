@@ -1,4 +1,6 @@
 import express from 'express';
+import passport from 'passport';
+import { esRol } from '../../midlewares/global/role_handler.js';
 import * as controller from '../../controllers/ver1/controller_turnos.js'
 import { validarTurno, validarIdTurno } from '../../midlewares/validators/turnosValidators.js';
 
@@ -51,7 +53,10 @@ const routerv1turnos = express.Router();
  */
 
 
-routerv1turnos.get('/', controller.mostrarTurnos);
+routerv1turnos.get('/', passport.authenticate('jwt',
+    { session: false }),
+    esRol(1, 2, 3),
+    controller.mostrarTurnos);
 
 /**
  * @swagger
@@ -77,7 +82,9 @@ routerv1turnos.get('/', controller.mostrarTurnos);
  *         description: Error del servidor
  */
 
-routerv1turnos.get('/:id', validarIdTurno, controller.mostrarTurnoPorId);
+routerv1turnos.get('/:id', passport.authenticate('jwt',
+    { session: false }),
+    esRol(1, 2, 3), validarIdTurno, controller.mostrarTurnoPorId);
 
 /**
  * @swagger
@@ -114,7 +121,10 @@ routerv1turnos.get('/:id', validarIdTurno, controller.mostrarTurnoPorId);
  *         description: Error del servidor
  */
 
-routerv1turnos.put('/:id', validarIdTurno, validarTurno, controller.updateTurno);
+routerv1turnos.put('/:id', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3), 
+    validarIdTurno, validarTurno, controller.updateTurno);
 
 /**
  * @swagger
@@ -140,7 +150,10 @@ routerv1turnos.put('/:id', validarIdTurno, validarTurno, controller.updateTurno)
  *         description: Error del servidor
  */
 
-routerv1turnos.delete('/:id', validarIdTurno, controller.borrarTurno);
+routerv1turnos.delete('/:id', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),validarIdTurno,
+    controller.borrarTurno);
 
 /**
  * @swagger
@@ -166,7 +179,10 @@ routerv1turnos.delete('/:id', validarIdTurno, controller.borrarTurno);
  *         description: Error del servidor
  */
 
-routerv1turnos.patch('/:id/reactivar', validarIdTurno,  controller.volverTurnoActivo);
+routerv1turnos.patch('/:id/reactivar', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),validarIdTurno, 
+    controller.volverTurnoActivo);
 
 /**
  * @swagger
@@ -208,6 +224,10 @@ routerv1turnos.patch('/:id/reactivar', validarIdTurno,  controller.volverTurnoAc
  *         description: "Error del servidor"
  */
 
-routerv1turnos.post('/crear', validarTurno, controller.nuevoTurno);
+routerv1turnos.post('/crear', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),
+    validarTurno,
+    controller.nuevoTurno);
 
 export default routerv1turnos;
