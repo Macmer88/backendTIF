@@ -3,6 +3,8 @@ import * as validatorsReservas from '../../midlewares/validators/reservasValidat
 import * as midlewareReservas from '../../midlewares/specifics/midlewareReservas.js';
 import { uploadCumpleanero } from '../../config/multer.js';
 import express from 'express';
+import passport from 'passport';
+import { esRol } from '../../midlewares/global/role_handler.js';
 const routerv1reservas = express.Router();
 
 /**
@@ -45,7 +47,11 @@ const routerv1reservas = express.Router();
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1reservas.get('/', controladoresReservas.mostrarReservas);
+routerv1reservas.get('/',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),
+    controladoresReservas.mostrarReservas);
 
 /**
  * @swagger
@@ -68,7 +74,11 @@ routerv1reservas.get('/', controladoresReservas.mostrarReservas);
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1reservas.get('/:id', controladoresReservas.mostrarReservasPorId);
+routerv1reservas.get('/:id',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(1, 2, 3),
+    controladoresReservas.mostrarReservasPorId);
 
 /**
  * @swagger
@@ -109,7 +119,12 @@ routerv1reservas.get('/:id', controladoresReservas.mostrarReservasPorId);
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1reservas.put('/:id', validatorsReservas.validarIdReserva, validatorsReservas.validarReservas, controladoresReservas.updateReserva);
+routerv1reservas.put('/:id',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(3),validatorsReservas.validarIdReserva,
+    validatorsReservas.validarReservas,
+    controladoresReservas.updateReserva);
 
 /**
  * @swagger
@@ -132,7 +147,12 @@ routerv1reservas.put('/:id', validatorsReservas.validarIdReserva, validatorsRese
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1reservas.delete('/:id', validatorsReservas.validarIdReserva, controladoresReservas.borrarReserva);
+routerv1reservas.delete('/:id',
+    passport.authenticate('jwt',
+    { session: false }), 
+    esRol(3),
+    validatorsReservas.validarIdReserva,
+    controladoresReservas.borrarReserva);
 
 /**
  * @swagger
@@ -155,7 +175,12 @@ routerv1reservas.delete('/:id', validatorsReservas.validarIdReserva, controlador
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, controladoresReservas.volverReservaActiva);
+routerv1reservas.patch('/:id/reactivar',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(3),
+    validatorsReservas.validarIdReserva,
+    controladoresReservas.volverReservaActiva);
 
 /**
  * @swagger
@@ -253,7 +278,14 @@ routerv1reservas.patch('/:id/reactivar', validatorsReservas.validarIdReserva, co
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1reservas.post('/crear', uploadCumpleanero.single('foto_cumpleaniero'), validatorsReservas.validarReservas, midlewareReservas.estaDisponible, controladoresReservas.nuevaReserva);
+    routerv1reservas.post('/crear',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(1,3),
+    uploadCumpleanero.single('foto_cumpleaniero'),
+    validatorsReservas.validarReservas,
+    midlewareReservas.estaDisponible,
+    controladoresReservas.nuevaReserva);
 
 /**
  * @swagger
@@ -292,7 +324,12 @@ routerv1reservas.post('/crear', uploadCumpleanero.single('foto_cumpleaniero'), v
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1reservas.patch('/foto/:id', validatorsReservas.validarIdReserva, uploadCumpleanero.single('foto_cumpleaniero'), controladoresReservas.cambiarFotoCumpleaniero);
+routerv1reservas.patch('/foto/:id',
+    passport.authenticate('jwt', { session: false }),
+    esRol(1,3),
+    validatorsReservas.validarIdReserva,
+    uploadCumpleanero.single('foto_cumpleaniero'),
+    controladoresReservas.cambiarFotoCumpleaniero);
 
 export default routerv1reservas;
 

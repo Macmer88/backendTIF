@@ -43,18 +43,6 @@ export const validarReservas = [
             return true;
         }),
 
-    // --- Validación de usuario_id 
-    body('usuario_id')
-        .notEmpty().withMessage('Debe ingresar un ID de Usuario')
-        .isInt({ min: 1 }).withMessage('El id debe ser un número entero positivo')
-        .toInt()
-        .custom(async (usuario_id) => {
-            const usuario = await usuariosPorId(usuario_id);
-            if (!usuario || usuario.activo === 0) {
-                throw new Error('El usuario seleccionado no existe o no está disponible.');
-            }
-            return true;
-        }),
 
     //validación de turno_id 
     body('turno_id')

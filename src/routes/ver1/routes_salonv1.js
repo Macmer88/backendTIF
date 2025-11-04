@@ -1,8 +1,11 @@
 import express from 'express';
+import passport from 'passport';
 import { mostrarSalones } from '../../controllers/ver1/controller_salonesv1.js';
 import { mostrarSalonPorId, updateSalon, borrarSalon, volverSalonActivo, nuevoSalon } from '../../controllers/ver1/controller_salonesv1.js';
 import { validarSalones, validarIdSalon } from '../../midlewares/validators/salonesValidators.js';
 import { verificarSalonExistente } from '../../midlewares/specifics/midlewareSalones.js';
+import { esRol } from '../../midlewares/global/role_handler.js';
+
 const routerv1salones = express.Router();
 
 /**
@@ -45,7 +48,9 @@ const routerv1salones = express.Router();
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1salones.get('/', mostrarSalones);
+routerv1salones.get('/', passport.authenticate('jwt', 
+    { session: false }),
+    esRol(1,2,3), mostrarSalones);
 
 /**
  * @swagger
@@ -68,7 +73,10 @@ routerv1salones.get('/', mostrarSalones);
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1salones.get('/:id', validarIdSalon, mostrarSalonPorId);
+routerv1salones.get('/:id', passport.authenticate('jwt', 
+    { session: false }),
+    esRol(1,2,3),validarIdSalon,
+    mostrarSalonPorId);
 
 /**
  * @swagger
@@ -112,7 +120,9 @@ routerv1salones.get('/:id', validarIdSalon, mostrarSalonPorId);
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1salones.put('/:id', validarIdSalon, validarSalones, updateSalon);
+routerv1salones.put('/:id', passport.authenticate('jwt',
+    { session: false }), esRol(2,3),
+    validarIdSalon, validarSalones, updateSalon);
 
 /**
  * @swagger
@@ -135,7 +145,9 @@ routerv1salones.put('/:id', validarIdSalon, validarSalones, updateSalon);
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1salones.delete('/:id', validarIdSalon, borrarSalon);
+routerv1salones.delete('/:id', passport.authenticate('jwt', 
+    { session: false }), esRol(2,3),
+    validarIdSalon, borrarSalon);
 
 /**
  * @swagger
@@ -158,7 +170,9 @@ routerv1salones.delete('/:id', validarIdSalon, borrarSalon);
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1salones.patch('/:id/reactivar', validarIdSalon, verificarSalonExistente, volverSalonActivo);
+routerv1salones.patch('/:id/reactivar', passport.authenticate('jwt',
+    { session: false }), esRol(2,3),
+    validarIdSalon, verificarSalonExistente, volverSalonActivo);
 
 /**
  * @swagger
@@ -196,6 +210,8 @@ routerv1salones.patch('/:id/reactivar', validarIdSalon, verificarSalonExistente,
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1salones.post('/crear', validarSalones, verificarSalonExistente, nuevoSalon);
+routerv1salones.post('/crear', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2,3), validarSalones, verificarSalonExistente, nuevoSalon);
 
 export default routerv1salones;

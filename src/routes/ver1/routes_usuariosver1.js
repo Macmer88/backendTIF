@@ -1,5 +1,7 @@
 import * as controllerUsuariosver1 from '../../controllers/ver1/controller_usuarios.js';
 import express from 'express';
+import passport from 'passport';
+import { esRol } from '../../midlewares/global/role_handler.js';
 import { uploadUsuario } from '../../config/multer.js';
 import * as validator from '../../midlewares/validators/usuariosValidators.js';
 
@@ -45,7 +47,9 @@ const routerv1usuarios = express.Router();
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1usuarios.get('/', controllerUsuariosver1.mostrarUsuarios);
+routerv1usuarios.get('/', passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),controllerUsuariosver1.mostrarUsuarios);
 
 /**
  * @swagger
@@ -68,7 +72,10 @@ routerv1usuarios.get('/', controllerUsuariosver1.mostrarUsuarios);
  *       "500":
  *         description: "Error del servidor"
  */
-routerv1usuarios.get('/:id',
+routerv1usuarios.get('/:id', 
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(2, 3),
     validator.validarIdUsuario,
     controllerUsuariosver1.mostrarUsuarioPorId);
 
@@ -94,6 +101,9 @@ routerv1usuarios.get('/:id',
  *         description: "Error del servidor"
  */
 routerv1usuarios.delete('/:id',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(3),
     validator.validarIdUsuario,
     controllerUsuariosver1.eliminarUsuario);
 
@@ -119,6 +129,9 @@ routerv1usuarios.delete('/:id',
  *         description: "Error del servidor"
  */
 routerv1usuarios.patch('/:id/reactivar',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(3),
     validator.validarIdUsuario,
     controllerUsuariosver1.reactivarUsuario);
 
@@ -163,6 +176,9 @@ routerv1usuarios.patch('/:id/reactivar',
  *         description: "Error del servidor"
  */
 routerv1usuarios.put('/:id',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(3),
     validator.validarIdUsuario,
     validator.validarActualizacionUsuario,
     controllerUsuariosver1.actualizarUsuario);
@@ -197,6 +213,9 @@ routerv1usuarios.put('/:id',
  *         description: "Error del servidor"
  */
 routerv1usuarios.post('/crear',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(3),
     uploadUsuario.single('foto'),
     validator.validarNuevoUsuario,
     controllerUsuariosver1.nuevoUsuario);
@@ -236,6 +255,9 @@ routerv1usuarios.post('/crear',
  *         description: "Error del servidor"
  */
 routerv1usuarios.patch('/:id/foto',
+    passport.authenticate('jwt',
+    { session: false }),
+    esRol(3),
     uploadUsuario.single('foto'),
     validator.validarIdUsuario,
     controllerUsuariosver1.cambiarFotoUsuario);

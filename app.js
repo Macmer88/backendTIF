@@ -8,7 +8,10 @@ import routerv1reservas_salones from './src/routes/ver1/routes_reservasv1.js';
 //import routesReservasServicios from './src/routes/ver1/routes_reservas_servicios.js';
 import routerv1servicios from './src/routes/ver1/routes_servicios.js';
 import routerv1turnos from './src/routes/ver1/routes_turnos.js';
+import routerv1auth from './src/routes/ver1/routes_auth.js';
 import corsMiddleware from './src/midlewares/global/corsconfig.js';
+import passport from 'passport';
+import configurePassport from './src/config/passport.js';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/docs/swaggerConfig.js';
 import helmet from 'helmet';
@@ -24,6 +27,8 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use(logger);
 
+app.use(passport.initialize());
+configurePassport(passport);
 
 app.use(express.static('src/public'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -35,6 +40,11 @@ app.use('/api/ver1/reservas_salones', routerv1reservas_salones);
 app.use('/api/ver1/usuarios', routerv1usuarios);
 app.use('/api/ver1/servicios', routerv1servicios);
 app.use('/api/ver1/turnos', routerv1turnos);
+<<<<<<< HEAD
+=======
+app.use('/api/ver1/auth', routerv1auth);
+
+>>>>>>> main
 app.use('/api/ver2/salones', routerv2salones);
 
 app.use(notFound);

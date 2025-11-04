@@ -4,12 +4,12 @@ import { body, param, validationResult } from 'express-validator';
 export const validarTurno = [
     body('hora_desde')
         .notEmpty().withMessage('La hora de inicio es obligatoria')
-        .isTime({ hourFormat: 'HH', minuteFormat: 'MM' })
+        .matches(/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/)
         .withMessage('La hora de inicio debe tener el formato HH:MM'),
 
     body('hora_hasta')
         .notEmpty().withMessage('La hora de fin es obligatoria')
-        .isTime({ hourFormat: 'HH', minuteFormat: 'MM' })
+        .matches(/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/)
         .withMessage('La hora de fin debe tener el formato HH:MM'),
 
     body('hora_hasta').custom((value, { req }) => {

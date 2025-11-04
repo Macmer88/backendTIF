@@ -11,11 +11,25 @@ export async function fetchReservas(activo,ordenar,desc,limit,offset) {
     return await modeloReservas.reservasConFiltro(activo,ordenar,desc,limit,offset);
 }
 
-export async function reservasById(id){
+export async function reservasById(id, usuarioAutenticado){
     const reserva = await modeloReservas.reservasPorId(id);
     if(!reserva){
         throw createError(404,'Reserva no encontrada')
     }
+
+    // --- LÓGICA DE PERTENENCIA AÑADIDA ---
+    const esAdmin = usuarioAutenticado.tipo_usuario === 3;
+    const esEmpleado = usuarioAutenticado.tipo_usuario === 2;
+    // Comparamos el 'usuario_id' de la reserva con el 'usuario_id' del token
+    const esPropietario = reserva.usuario_id === usuarioAutenticado.usuario_id;
+
+    // Si el usuario NO es Admin, Y NO es Empleado, Y NO es el propietario
+    if (!esAdmin && !esEmpleado && !esPropietario) {
+        // Es un Cliente (Rol 1) intentando ver la reserva de otro.
+        throw createError(403, 'Acceso denegado. No tienes permiso para ver esta reserva.');
+    }
+    // --- FIN LÓGICA DE PERTENENCIA ---
+
     if (reserva.activo !==1){
         return{
             mensaje: 'Reserva inactiva',
@@ -217,12 +231,19 @@ export async function verificarDisponibilidad(salon_id, fecha_reserva, turno_id)
 }
 
 
-export const cambiarFoto = async (id, nuevoArchivo) => { 
+export const cambiarFoto = async (id, nuevoArchivo, usuarioAutenticado) => {
     const idNumerico = parseInt(id, 10);
 
     const reserva = await modeloReservas.reservasPorId(idNumerico);
     if (!reserva) {
         throw createError(404, 'La reserva no fue encontrada.');
+    }
+
+    const esAdmin = usuarioAutenticado.tipo_usuario === 3;
+    const esPropietario = reserva.usuario_id === usuarioAutenticado.usuario_id;
+
+    if (!esAdmin && !esPropietario) {
+        throw createError(403, 'Acceso denegado. No tienes permiso para modificar esta reserva.');
     }
 
     const fotoAntigua = reserva.foto_cumpleaniero;
