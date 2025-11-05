@@ -1,7 +1,11 @@
 import { body, param, validationResult } from 'express-validator';
 
-
 export const validarTurno = [
+    body('orden')
+        .notEmpty().withMessage('El número de orden es obligatorio')
+        .isInt({ min: 1 }).withMessage('El orden debe ser un número entero positivo')
+        .toInt(),
+
     body('hora_desde')
         .notEmpty().withMessage('La hora de inicio es obligatoria')
         .matches(/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/)
@@ -14,7 +18,9 @@ export const validarTurno = [
 
     body('hora_hasta').custom((value, { req }) => {
         const hora_desde = req.body.hora_desde;
-        if (value && hora_desde && value <= hora_desde) {
+
+        const regex = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
+        if (regex.test(value) && regex.test(hora_desde) && value <= hora_desde) {
             throw new Error('La hora de fin debe ser posterior a la hora de inicio');
         }
         return true;

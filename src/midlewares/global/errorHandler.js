@@ -1,3 +1,4 @@
+import { errorLogger } from './logger.js'; 
 
 // Este middleware captura cualquier error que ocurra en rutas o middlewares
 const errorHandler = (err, req, res, next) => {
@@ -5,9 +6,15 @@ const errorHandler = (err, req, res, next) => {
     const path = req.originalUrl;
     const method = req.method;
 
-    // Log básico con contexto de la petición
-    console.error(`[${timestamp}] ${method} ${path}`);
-    console.error(`Error: ${err.name} - ${err.message}`);
+    errorLogger.error({
+        timestamp: timestamp,
+        method: method,
+        path: path,
+        errorName: err.name,
+        errorMessage: err.message,
+        stack: err.stack, 
+        statusCode: err.statusCode || err.status || 500
+    });
 
     // Manejo de errores de validación (express-validator)
     if (err.name === 'ValidationError') {
@@ -33,7 +40,7 @@ const errorHandler = (err, req, res, next) => {
         });
     }
 
-    // Manejo de errores personalizados con statusCode
+    // Manejo de errores personalizados con statusCode (los createError)
     if (err.statusCode) {
         return res.status(err.statusCode).json({
             error: err.message,
@@ -43,7 +50,7 @@ const errorHandler = (err, req, res, next) => {
     // Manejo genérico para cualquier otro error
     res.status(500).json({
         error: 'Error interno del servidor',
-        message: err.message,
+        message: err.message, // O un mensaje genérico si no quieres exponer detalles
     });
 };
 
