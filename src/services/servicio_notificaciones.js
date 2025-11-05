@@ -43,7 +43,11 @@ export async function enviarNotificacionReserva(datosReserva, datosCliente, dato
     // --- 1. Email para el Cliente ---
     const mailCliente = {
         from: '"Gestión de Salones" <no-reply@salones.com>',
-        to: datosCliente.email,
+        
+        // --- ESTA ES LA CORRECCIÓN ---
+        to: datosCliente.nombre_usuario, // Usamos nombre_usuario en lugar de email
+        // --- FIN DE LA CORRECCIÓN ---
+        
         subject: `¡Reserva Confirmada! (ID: ${datosReserva.reserva_id})`,
         text: `Hola ${datosCliente.nombre}, tu reserva para el ${datosReserva.fecha_reserva} ha sido confirmada.`,
         html: `
@@ -67,7 +71,9 @@ export async function enviarNotificacionReserva(datosReserva, datosCliente, dato
             <p>Se ha creado una nueva reserva en el sistema:</p>
             <ul>
                 <li><b>ID Reserva:</b> ${datosReserva.reserva_id}</li>
-                <li><b>Cliente:</b> ${datosCliente.nombre} ${datosCliente.apellido} (Email: ${datosCliente.email})</li>
+                
+                <li><b>Cliente:</b> ${datosCliente.nombre} ${datosCliente.apellido} (Email: ${datosCliente.nombre_usuario})</li>
+                
                 <li><b>Fecha:</b> ${datosReserva.fecha_reserva}</li>
                 <li><b>Salón:</b> ${datosReserva.salon_titulo}</li>
                 <li><b>Importe:</b> $${datosReserva.importe_total}</li>
@@ -86,5 +92,6 @@ export async function enviarNotificacionReserva(datosReserva, datosCliente, dato
 
     } catch (error) {
         console.error("Error al enviar emails:", error);
+        // No lanzamos un error (throw)
     }
 }
