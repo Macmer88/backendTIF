@@ -71,16 +71,6 @@ export async function fetchSalonById(id) {
 export async function modificarSalon(id, datos) {
     const { titulo, direccion, capacidad, activo, importe } = datos;
 
-    if (
-        titulo === undefined ||
-        direccion === undefined ||
-        capacidad === undefined ||
-        activo === undefined ||
-        importe === undefined
-    ) {
-        throw createError(400, "Faltan campos obligatorios");
-    }
-
     const activoInt = Number(activo);
     await updateSalon(id, { titulo, direccion, capacidad, activo: activoInt, importe });
 
@@ -126,10 +116,6 @@ export async function reactivarSalon(id) {
 
 export async function crearSalon(datos) {
     const { titulo, direccion, capacidad, importe } = datos;
-
-    if (!titulo || !direccion || capacidad === undefined || importe === undefined) {
-        throw createError(400, "Faltan campos obligatorios");
-    }
 
     await createSalon({ titulo, direccion, capacidad, importe });
 

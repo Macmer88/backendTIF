@@ -47,14 +47,6 @@ export async function fetchReservasPorSalon(salon_id){
 
 export async function modificarReserva(id, datos) {
     const { fecha_reserva, salon_id, turno_id, importe_total } = datos;
-    if (
-        fecha_reserva === undefined ||
-        salon_id === undefined ||
-        turno_id === undefined ||
-        importe_total === undefined
-    ) {
-        throw  createError(400,"Faltan campos obligatorios");
-    }
 
     await modeloReservas.updateReservas(id, { fecha_reserva, salon_id, turno_id, importe_total});
 }
@@ -231,22 +223,7 @@ try {
 }
 
 
-/*
 
-export async function crearReserva(datos) {
-    const { fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_total } = datos;
-    const salon_elegido = await salonesPorId(salon_id);
-    let importe = salon_elegido.importe;
-    if (!fecha_reserva || !salon_id || !usuario_id || !turno_id || tematica === undefined || importe_total === undefined) {
-        throw createError(400,"Faltan campos obligatorios");
-    }
-
-
-    await modeloReservas.createReserva({fecha_reserva, salon_id, usuario_id, turno_id, foto_cumpleaniero, tematica, importe_salon:importe, importe_total });
-
-    return { mensaje: 'Reserva creada con éxito.' };
-}
-*/
 
 
 export async function verificarDisponibilidad(salon_id, fecha_reserva, turno_id) {
