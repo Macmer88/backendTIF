@@ -4,8 +4,8 @@ import * as modeloReservas from '../databases/modelo_reservas.js';
 import { salonesPorId } from '../databases/modelo_salones.js';
 import { deleteImage } from '../utils/fileutils.js';
 import createError from 'http-errors';
-
-
+import { enviarNotificacionReserva } from './servicio_notificaciones.js';
+import { usuariosPorId } from '../databases/modelo_usuarios.js';
 
 export async function fetchReservas(activo,ordenar,desc,limit,offset) {
     return await modeloReservas.reservasConFiltro(activo,ordenar,desc,limit,offset);
@@ -169,6 +169,33 @@ try {
         // PASO 11: COMMIT (Antes era el paso 9)
         // Si todo lo anterior (Pasos 6-10) funcionó, confirmamos.
         await connection.commit();
+
+        try {
+            // 1. Buscamos los datos completos del cliente (para su email)
+            
+            // Esta era la línea con el error, ahora está corregida:
+            const cliente = await usuariosPorId(usuario_id);
+            
+            // 2. Definimos el email del admin (debe estar en .env)
+            const adminEmail = process.env.ADMIN_EMAIL || 'admin@sistema.com'; // Email de fallback
+
+            // 3. Creamos el objeto de datos para el email
+            const datosEmailReserva = {
+                reserva_id: nuevaReservaId,
+                fecha_reserva: fecha_reserva,
+                salon_titulo: salon_elegido.titulo, // Ya lo teníamos
+                tematica: tematica,
+                importe_total: importe_final_total
+            };
+
+            // 4. Enviamos la notificación (SIN 'await')
+            enviarNotificacionReserva(datosEmailReserva, cliente, adminEmail);
+
+        } catch (emailError) {
+            // Si el email falla, NO detenemos la app.
+            // La reserva ya se creó. Solo lo logueamos.
+            console.error("Error al intentar enviar email de notificación:", emailError.message);
+        }
 
         // PASO 12: Devolvemos la respuesta final (Antes era el paso 10)
         return { 

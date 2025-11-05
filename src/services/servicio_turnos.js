@@ -25,13 +25,10 @@ export async function fetchTurnoById(id){
 export async function modificarTurno(id, datos) {
     const { hora_desde, hora_hasta } = datos;
 
-    if (
-        hora_desde === undefined ||
-        hora_hasta === undefined
-    ) {
-        throw createError(400,"Faltan campos obligatorios");
+    const turnosSuperpuestos = await modeloTurnos.buscarTurnosSuperpuestos(hora_desde, hora_hasta, id);
+    if (turnosSuperpuestos.length > 0) {
+        throw createError(409, 'El rango de horario se superpone con un turno existente.');
     }
-
     await modeloTurnos.updateTurno(id, { hora_desde, hora_hasta });
     return { mensaje: 'Turno modificado con éxito' };
 }
@@ -67,10 +64,16 @@ export async function reactivarTurno(id) {
 export async function crearTurno(datos) {
     const { orden, hora_desde, hora_hasta } = datos;
 
-    if (!hora_desde || !hora_hasta) {
-        throw createError(400, "Faltan campos obligatorios");
+    const turnoExistente = await modeloTurnos.buscarTurnoPorOrden(orden);
+    if (turnoExistente) {
+        throw createError(409, 'El número de orden ya está en uso por otro turno.');
     }
 
+    const turnosSuperpuestos = await modeloTurnos.buscarTurnosSuperpuestos(hora_desde, hora_hasta);
+    if (turnosSuperpuestos.length > 0) {
+        throw createError(409, 'El rango de horario se superpone con un turno existente.');
+    }
+    
     await modeloTurnos.createTurno({ orden, hora_desde, hora_hasta });
 
     return { mensaje: 'Turno creado con éxito'};
