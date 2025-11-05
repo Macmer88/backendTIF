@@ -25,12 +25,6 @@ export async function fetchServicioById(id){
 export async function modificarServicio(id, datos) {
     const { descripcion, importe } = datos;
 
-    if (
-        descripcion === undefined ||
-        importe === undefined
-    ) {
-        throw createError(400,"Faltan campos obligatorios");
-    }
 
     await modeloServicios.updateServicio(id, { descripcion, importe });
     return { mensaje: 'Servicio modificado con éxito' };
@@ -66,10 +60,6 @@ export async function reactivarServicio(id) {
 
 export async function crearServicio(datos) {
     const { descripcion, importe } = datos;
-
-    if (!descripcion || importe === undefined) {
-        throw createError(400, "Faltan campos obligatorios");
-    }
 
     await modeloServicios.createServicio({ descripcion, importe });
 

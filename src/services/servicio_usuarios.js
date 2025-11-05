@@ -51,12 +51,6 @@ export async function reactivateUsuario(id) {
 export async function updateUsuario(id, datos) {
     const { nombre, apellido, tipo_usuario, celular } = datos;
 
-    if (    nombre === undefined ||
-            apellido === undefined ||
-            tipo_usuario === undefined ||
-            celular === undefined) {
-        throw new Error("Faltan campos obligatorios");
-    }
     const name = datos.nombre.toLowerCase();
     const surname = datos.apellido.toLowerCase();
     const nombre_usuario = name.slice(0, 3)+ surname.slice(0, 3)+ '@correo.com';
