@@ -1,5 +1,6 @@
 import express from 'express';
 import passport from 'passport';
+import { auditLoggerMiddleware } from '../../midlewares/global/logger.js';
 import { esRol } from '../../midlewares/global/role_handler.js';
 import * as controller from '../../controllers/ver1/controller_turnos.js'
 import { validarTurno, validarIdTurno } from '../../midlewares/validators/turnosValidators.js';
@@ -55,6 +56,7 @@ const routerv1turnos = express.Router();
 
 routerv1turnos.get('/', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(1, 2, 3),
     controller.mostrarTurnos);
 
@@ -84,6 +86,7 @@ routerv1turnos.get('/', passport.authenticate('jwt',
 
 routerv1turnos.get('/:id', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(1, 2, 3), validarIdTurno, controller.mostrarTurnoPorId);
 
 /**
@@ -123,6 +126,7 @@ routerv1turnos.get('/:id', passport.authenticate('jwt',
 
 routerv1turnos.put('/:id', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3), 
     validarIdTurno, validarTurno, controller.updateTurno);
 
@@ -152,6 +156,7 @@ routerv1turnos.put('/:id', passport.authenticate('jwt',
 
 routerv1turnos.delete('/:id', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),validarIdTurno,
     controller.borrarTurno);
 
@@ -181,6 +186,7 @@ routerv1turnos.delete('/:id', passport.authenticate('jwt',
 
 routerv1turnos.patch('/:id/reactivar', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),validarIdTurno, 
     controller.volverTurnoActivo);
 
@@ -226,6 +232,7 @@ routerv1turnos.patch('/:id/reactivar', passport.authenticate('jwt',
 
 routerv1turnos.post('/crear', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),
     validarTurno,
     controller.nuevoTurno);

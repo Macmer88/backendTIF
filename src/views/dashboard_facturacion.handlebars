@@ -1,9 +1,6 @@
-{{!-- Este es el archivo dashboard.handlebars --}}
-{{!-- No necesita <html> o <body>, eso lo pone el layout --}}
-
+{{!-- Este es el archivo dashboard_facturacion.handlebars --}}
 <div class="dashboard-header">
-    <h1>Dashboard de Estadísticas</h1>
-    <p>Resumen de la actividad del negocio.</p>
+    <h1>Dashboard: {{tituloPagina}}</h1>
 </div>
 
 <hr>
@@ -11,6 +8,10 @@
 <div class="widget">
     <h2>Facturación por Mes</h2>
     <p>Datos generados por el Procedimiento Almacenado `SP_Reporte_Facturacion_Por_Mes`.</p>
+
+    <div class="report-buttons">
+        <a href="/api/ver1/reportes/facturacion?formato=pdf" class="report-button pdf" target="_blank">Descargar PDF</a>
+    </div>
 
     <table class="stats-table">
         <thead>
@@ -21,10 +22,6 @@
             </tr>
         </thead>
         <tbody>
-            {{!-- 
-            Aquí "facturacion" es la variable que pasamos 
-            desde el controlador: res.render('dashboard', { facturacion: ... }) 
-            --}}
             {{#each facturacion}}
                 <tr>
                     <td>{{this.Anio}}</td>
@@ -39,13 +36,3 @@
         </tbody>
     </table>
 </div>
-
-{{!-- 
-    (En el futuro, aquí añadiríamos más "widgets")
-    <div class="widget">
-        <h2>Salones Más Populares</h2>
-        <table class="stats-table">
-            ...
-        </table>
-    </div>
---}}

@@ -1,5 +1,6 @@
 import express from 'express';
 import passport from 'passport';
+import { auditLoggerMiddleware } from '../../midlewares/global/logger.js';
 import { mostrarSalones } from '../../controllers/ver1/controller_salonesv1.js';
 import { mostrarSalonPorId, updateSalon, borrarSalon, volverSalonActivo, nuevoSalon } from '../../controllers/ver1/controller_salonesv1.js';
 import { validarSalones, validarIdSalon } from '../../midlewares/validators/salonesValidators.js';
@@ -50,6 +51,7 @@ const routerv1salones = express.Router();
  */
 routerv1salones.get('/', passport.authenticate('jwt', 
     { session: false }),
+    auditLoggerMiddleware,
     esRol(1,2,3), mostrarSalones);
 
 /**
@@ -75,6 +77,7 @@ routerv1salones.get('/', passport.authenticate('jwt',
  */
 routerv1salones.get('/:id', passport.authenticate('jwt', 
     { session: false }),
+    auditLoggerMiddleware,
     esRol(1,2,3),validarIdSalon,
     mostrarSalonPorId);
 
@@ -122,6 +125,7 @@ routerv1salones.get('/:id', passport.authenticate('jwt',
  */
 routerv1salones.put('/:id', passport.authenticate('jwt',
     { session: false }), esRol(2,3),
+    auditLoggerMiddleware,
     validarIdSalon, validarSalones, updateSalon);
 
 /**
@@ -147,6 +151,7 @@ routerv1salones.put('/:id', passport.authenticate('jwt',
  */
 routerv1salones.delete('/:id', passport.authenticate('jwt', 
     { session: false }), esRol(2,3),
+    auditLoggerMiddleware,
     validarIdSalon, borrarSalon);
 
 /**
@@ -171,7 +176,9 @@ routerv1salones.delete('/:id', passport.authenticate('jwt',
  *         description: "Error del servidor"
  */
 routerv1salones.patch('/:id/reactivar', passport.authenticate('jwt',
-    { session: false }), esRol(2,3),
+    { session: false }),
+    auditLoggerMiddleware,
+    esRol(2,3),
     validarIdSalon, verificarSalonExistente, volverSalonActivo);
 
 /**
@@ -212,6 +219,7 @@ routerv1salones.patch('/:id/reactivar', passport.authenticate('jwt',
  */
 routerv1salones.post('/crear', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2,3), validarSalones, verificarSalonExistente, nuevoSalon);
 
 export default routerv1salones;
