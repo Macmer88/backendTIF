@@ -3,6 +3,16 @@ import path from 'path';
 
 const logDir = path.resolve(process.cwd(), 'logs');
 
+// --- MAPEO DE ROLES ---
+const ROL_MAP = {
+    1: 'Cliente',
+    2: 'Empleado', // Puedes usar 'Operario' si prefieres
+    3: 'Admin'
+};
+
+const getRoleName = (rolId) => ROL_MAP[rolId] || `Desconocido (${rolId})`;
+// -----------------------
+
 const auditTransport = new winston.transports.File({
     filename: path.join(logDir, 'audit.log'), 
     level: 'info', 
@@ -34,7 +44,8 @@ const consoleTransport = new winston.transports.Console({
             }
 
             if (info.usuario) {
-                return `${info.timestamp} ${info.level}: [${info.usuario}] ${info.method} ${info.url}`;
+                // Formato de salida: [HH:mm:ss info]: [16 (maxvil@correo.com) - Rol: Admin] GET /dashboard/turnos
+                return `${info.timestamp} ${info.level}: [${info.usuario}] ${info.method} ${info.url}`; 
             }
 
             return `${info.timestamp} ${info.level}: ${info.message}`;
@@ -47,22 +58,27 @@ const logger = winston.createLogger({
     transports: [auditTransport, consoleTransport]
 });
 
+// Exportamos el errorLogger (sin cambios)
 export const errorLogger = winston.createLogger({
     transports: [errorTransport, consoleTransport]
 });
 
-const loggerMiddleware = (req, res, next) => {
-    const usuario = req.user ? `${req.user.usuario_id} (${req.user.nombre_usuario})` : 'Invitado';
+// La función de auditoría (Middleware)
+export const auditLoggerMiddleware = (req, res, next) => {
+    // Obtenemos el nombre del rol (ej: Admin, Empleado, Cliente)
+    const nombreRol = req.user ? getRoleName(req.user.tipo_usuario) : '';
+    
+    const usuario = req.user 
+        ? `${req.user.usuario_id} (${req.user.nombre_usuario}) - Rol: ${nombreRol}` 
+        : 'Invitado';
 
     logger.info({
         timestamp: new Date().toISOString(),
         method: req.method,
         url: req.originalUrl,
-        usuario: usuario,
+        usuario: usuario, 
         ip: req.ip
     });
 
     next();
 };
-
-export default loggerMiddleware;

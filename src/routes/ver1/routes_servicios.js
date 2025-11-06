@@ -1,5 +1,6 @@
 import express from 'express';
 import passport from 'passport';
+import { auditLoggerMiddleware } from '../../midlewares/global/logger.js';
 import { esRol } from '../../midlewares/global/role_handler.js';
 import * as controller from '../../controllers/ver1/controller_servicios.js'
 import { validarServicio, validarIdServicio } from '../../midlewares/validators/serviciosValidators.js';
@@ -54,6 +55,7 @@ const routerv1servicios = express.Router();
 
 
 routerv1servicios.get('/', passport.authenticate('jwt', { session: false }),
+    auditLoggerMiddleware,
     esRol(1, 2, 3),
     controller.mostrarServicios);
 
@@ -82,6 +84,7 @@ routerv1servicios.get('/', passport.authenticate('jwt', { session: false }),
  */
 
 routerv1servicios.get('/:id', passport.authenticate('jwt', { session: false }),
+    auditLoggerMiddleware,
     esRol(1, 2, 3),validarIdServicio,
     controller.mostrarServicioPorId);
 
@@ -122,6 +125,7 @@ routerv1servicios.get('/:id', passport.authenticate('jwt', { session: false }),
 
 routerv1servicios.put('/:id', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),
     validarIdServicio, validarServicio, controller.updateServicio);
 
@@ -151,6 +155,7 @@ routerv1servicios.put('/:id', passport.authenticate('jwt',
 
 routerv1servicios.delete('/:id', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),
     validarIdServicio, controller.borrarServicio);
 
@@ -180,6 +185,7 @@ routerv1servicios.delete('/:id', passport.authenticate('jwt',
 
 routerv1servicios.patch('/:id/reactivar', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),
     validarIdServicio,  controller.volverServicioActivo);
 
@@ -225,6 +231,7 @@ routerv1servicios.patch('/:id/reactivar', passport.authenticate('jwt',
 
 routerv1servicios.post('/crear', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),validarServicio, controller.nuevoServicio);
 
 export default routerv1servicios;

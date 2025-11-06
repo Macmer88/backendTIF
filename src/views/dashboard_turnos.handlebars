@@ -1,0 +1,38 @@
+<div class="dashboard-header">
+    <h1>Dashboard: {{tituloPagina}}</h1>
+</div>
+
+<hr>
+
+<div class="widget">
+    <h2>Turnos Más Solicitados</h2>
+    <p>Datos generados por el Procedimiento Almacenado `SP_Reporte_Turnos_Populares`.</p>
+
+    <div class="report-buttons">
+        <a href="/api/ver1/reportes/turnos?formato=pdf" class="report-button pdf" target="_blank">Descargar PDF</a>
+    </div>
+
+
+    <table class="stats-table">
+        <thead>
+            <tr>
+                <th>Orden</th>
+                <th>Turno</th>
+                <th>Total de Reservas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each turnos}}
+                <tr>
+                    <td>{{this.Orden}}</td>
+                    <td>{{this.Turno}}</td>
+                    <td>{{this.Total_Reservas}}</td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan="3">No hay datos de reservas de turnos para mostrar.</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

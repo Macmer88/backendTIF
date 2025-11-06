@@ -1,0 +1,75 @@
+<div class="dashboard-header">
+    <h1>Dashboard: {{tituloPagina}}</h1>
+</div>
+
+<hr>
+
+<div class="widget">
+    <h2>Filtrar por Mes y Año</h2>
+    <form action="/dashboard/dias" method="GET" class="filter-form">
+        
+        <div class="form-group">
+            <label for="mes">Mes:</label>
+            <select name="mes" id="mes">
+                <option value="1" {{#if (eq filtros.mes 1)}}selected{{/if}}>Enero</option>
+                <option value="2" {{#if (eq filtros.mes 2)}}selected{{/if}}>Febrero</option>
+                <option value="3" {{#if (eq filtros.mes 3)}}selected{{/if}}>Marzo</option>
+                <option value="4" {{#if (eq filtros.mes 4)}}selected{{/if}}>Abril</option>
+                <option value="5" {{#if (eq filtros.mes 5)}}selected{{/if}}>Mayo</option>
+                <option value="6" {{#if (eq filtros.mes 6)}}selected{{/if}}>Junio</option>
+                <option value="7" {{#if (eq filtros.mes 7)}}selected{{/if}}>Julio</option>
+                <option value="8" {{#if (eq filtros.mes 8)}}selected{{/if}}>Agosto</option>
+                <option value="9" {{#if (eq filtros.mes 9)}}selected{{/if}}>Septiembre</option>
+                <option value="10" {{#if (eq filtros.mes 10)}}selected{{/if}}>Octubre</option>
+                <option value="11" {{#if (eq filtros.mes 11)}}selected{{/if}}>Noviembre</option>
+                <option value="12" {{#if (eq filtros.mes 12)}}selected{{/if}}>Diciembre</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="anio">Año:</label>
+            <select name="anio" id="anio">
+                <option value="2025" {{#if (eq filtros.anio 2025)}}selected{{/if}}>2025</option>
+                <option value="2026" {{#if (eq filtros.anio 2026)}}selected{{/if}}>2026</option>
+                <option value="2027" {{#if (eq filtros.anio 2027)}}selected{{/if}}>2027</option>
+            </select>
+        </div>
+
+        <button type="submit" class="filter-button">Filtrar</button>
+    </form>
+</div>
+
+
+<div class="widget">
+    <h2>Resultados para {{filtros.mes}} / {{filtros.anio}}</h2>
+    <p>Datos generados por el Procedimiento Almacenado `SP_Reporte_Dias_Populares_Por_Mes`.</p>
+
+    <table class="stats-table">
+        <thead>
+            <tr>
+                <th>Día de la Semana</th>
+                <th>Total de Reservas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each dias}}
+                <tr>
+                    <td>{{this.Dia_Semana}}</td>
+                    <td>{{this.Total_Reservas}}</td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan="2">No hay datos de reservas para el mes y año seleccionados.</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{#helpers}}
+    {{#helper "eq" a b}}
+        {{#if (eq a b)}}
+            true
+        {{/if}}
+    {{/helper}}
+{{/helpers}}

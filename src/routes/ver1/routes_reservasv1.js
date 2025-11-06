@@ -1,6 +1,7 @@
 import * as controladoresReservas from '../../controllers/ver1/controller_reservas.js';
 import * as validatorsReservas from '../../midlewares/validators/reservasValidators.js';
 import * as midlewareReservas from '../../midlewares/specifics/midlewareReservas.js';
+import { auditLoggerMiddleware } from '../../midlewares/global/logger.js';
 import { uploadCumpleanero } from '../../config/multer.js';
 import express from 'express';
 import passport from 'passport';
@@ -50,6 +51,7 @@ const routerv1reservas = express.Router();
 routerv1reservas.get('/',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),
     controladoresReservas.mostrarReservas);
 
@@ -77,6 +79,7 @@ routerv1reservas.get('/',
 routerv1reservas.get('/:id',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(1, 2, 3),
     controladoresReservas.mostrarReservasPorId);
 
@@ -122,6 +125,7 @@ routerv1reservas.get('/:id',
 routerv1reservas.put('/:id',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(3),validatorsReservas.validarIdReserva,
     validatorsReservas.validarReservas,
     controladoresReservas.updateReserva);
@@ -149,7 +153,8 @@ routerv1reservas.put('/:id',
  */
 routerv1reservas.delete('/:id',
     passport.authenticate('jwt',
-    { session: false }), 
+    { session: false }),
+    auditLoggerMiddleware,
     esRol(3),
     validatorsReservas.validarIdReserva,
     controladoresReservas.borrarReserva);
@@ -178,6 +183,7 @@ routerv1reservas.delete('/:id',
 routerv1reservas.patch('/:id/reactivar',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(3),
     validatorsReservas.validarIdReserva,
     controladoresReservas.volverReservaActiva);
@@ -281,6 +287,7 @@ routerv1reservas.patch('/:id/reactivar',
     routerv1reservas.post('/crear',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(1,3),
     uploadCumpleanero.single('foto_cumpleaniero'),
     validatorsReservas.validarReservas,
@@ -326,6 +333,7 @@ routerv1reservas.patch('/:id/reactivar',
  */
 routerv1reservas.patch('/foto/:id',
     passport.authenticate('jwt', { session: false }),
+    auditLoggerMiddleware,
     esRol(1,3),
     validatorsReservas.validarIdReserva,
     uploadCumpleanero.single('foto_cumpleaniero'),

@@ -5,7 +5,8 @@ export async function obtenerReporteReservasDetallado() {
         SELECT 
             r.reserva_id,
             r.fecha_reserva,
-            r.tematica,
+            -- CORRECCIÓN: Usamos COALESCE para evitar NULL en tematica
+            COALESCE(r.tematica, '') AS tematica,
             r.importe_total,
             sa.titulo AS salon_titulo,
             t.hora_desde AS turno_desde,
@@ -13,7 +14,8 @@ export async function obtenerReporteReservasDetallado() {
             u.nombre AS cliente_nombre,
             u.apellido AS cliente_apellido,
             u.celular AS cliente_celular,
-            GROUP_CONCAT(se.descripcion SEPARATOR ', ') AS servicios_contratados
+            -- CORRECCIÓN: Usamos COALESCE para evitar NULL en servicios
+            COALESCE(GROUP_CONCAT(se.descripcion SEPARATOR ', '), '') AS servicios_contratados
         FROM 
             reservas r
         JOIN 

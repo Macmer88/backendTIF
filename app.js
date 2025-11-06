@@ -16,7 +16,6 @@ import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/docs/swaggerConfig.js';
 import { configurarNodemailer } from './src/services/servicio_notificaciones.js';
 import helmet from 'helmet';
-import logger from './src/midlewares/global/logger.js';
 import notFound from './src/midlewares/global/notFound.js';
 import errorHandler from './src/midlewares/global/errorHandler.js';
 
@@ -26,10 +25,10 @@ setupHandlebars(app);
 
 app.use(corsMiddleware);
 app.use(express.json());
-app.use(logger);
 
 app.use(passport.initialize());
 configurePassport(passport);
+
 
 app.use(express.static('src/public'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
