@@ -1,6 +1,7 @@
 import * as controllerUsuariosver1 from '../../controllers/ver1/controller_usuarios.js';
 import express from 'express';
 import passport from 'passport';
+import { auditLoggerMiddleware } from '../../midlewares/global/logger.js';
 import { esRol } from '../../midlewares/global/role_handler.js';
 import { uploadUsuario } from '../../config/multer.js';
 import * as validator from '../../midlewares/validators/usuariosValidators.js';
@@ -49,6 +50,7 @@ const routerv1usuarios = express.Router();
  */
 routerv1usuarios.get('/', passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),controllerUsuariosver1.mostrarUsuarios);
 
 /**
@@ -75,6 +77,7 @@ routerv1usuarios.get('/', passport.authenticate('jwt',
 routerv1usuarios.get('/:id', 
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(2, 3),
     validator.validarIdUsuario,
     controllerUsuariosver1.mostrarUsuarioPorId);
@@ -103,6 +106,7 @@ routerv1usuarios.get('/:id',
 routerv1usuarios.delete('/:id',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(3),
     validator.validarIdUsuario,
     controllerUsuariosver1.eliminarUsuario);
@@ -131,6 +135,7 @@ routerv1usuarios.delete('/:id',
 routerv1usuarios.patch('/:id/reactivar',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(3),
     validator.validarIdUsuario,
     controllerUsuariosver1.reactivarUsuario);
@@ -178,6 +183,7 @@ routerv1usuarios.patch('/:id/reactivar',
 routerv1usuarios.put('/:id',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(3),
     validator.validarIdUsuario,
     validator.validarActualizacionUsuario,
@@ -215,6 +221,7 @@ routerv1usuarios.put('/:id',
 routerv1usuarios.post('/crear',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(3),
     uploadUsuario.single('foto'),
     validator.validarNuevoUsuario,
@@ -257,6 +264,7 @@ routerv1usuarios.post('/crear',
 routerv1usuarios.patch('/:id/foto',
     passport.authenticate('jwt',
     { session: false }),
+    auditLoggerMiddleware,
     esRol(3),
     uploadUsuario.single('foto'),
     validator.validarIdUsuario,

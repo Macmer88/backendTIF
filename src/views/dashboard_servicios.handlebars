@@ -1,0 +1,36 @@
+{{!-- Este es el archivo dashboard_servicios.handlebars --}}
+<div class="dashboard-header">
+    <h1>Dashboard: {{tituloPagina}}</h1>
+</div>
+
+<hr>
+
+<div class="widget">
+    <h2>Top 5 Servicios Más Populares</h2>
+    <p>Datos generados por el Procedimiento Almacenado `SP_Reporte_Servicios_Populares`.</p>
+
+    <div class="report-buttons">
+        <a href="/api/ver1/reportes/servicios?formato=pdf" class="report-button pdf" target="_blank">Descargar PDF</a>
+    </div>
+
+    <table class="stats-table">
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Total de Contrataciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each servicios}}
+                <tr>
+                    <td>{{this.Servicio}}</td>
+                    <td>{{this.Total_Contrataciones}}</td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan="2">No hay datos de contrataciones de servicios para mostrar.</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

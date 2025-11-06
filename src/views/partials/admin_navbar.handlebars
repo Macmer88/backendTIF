@@ -3,13 +3,18 @@
         <span>Admin Dashboard</span>
     </div>
     <ul class="navbar-links">
-        <li><a href="/dashboard">Estadísticas</a></li>
-        <li><a href="/api/reportes/reservas?formato=pdf">Reporte PDF</a></li>
-        <li><a href="/api/reportes/reservas?formato=csv">Reporte CSV</a></li>
-        </ul>
+        {{!-- Links del Dashboard --}}
+        <li><a href="/dashboard">Facturación</a></li>
+        <li><a href="/dashboard/salones">Salones</a></li>
+        <li><a href="/dashboard/servicios">Servicios</a></li>
+        <li><a href="/dashboard/turnos">Turnos</a></li>
+        <li><a href="/dashboard/dias">Días Populares</a></li>
+
+        <li><a href="/api/ver1/reportes/reservas?formato=pdf" class="report-button pdf" target="_blank">Reporte General de reservas (PDF)</a></li>
+    </ul>
     <div class="navbar-user">
         {{#if usuario}}
-            <span>Bienvenido, **{{usuario.nombre_usuario}}** ({{usuario.tipo_usuario}})</span>
+            <span>Bienvenido, **{{usuario.nombre_usuario}}**</span>
         {{/if}}
-        </div>
+    </div>
 </nav>
