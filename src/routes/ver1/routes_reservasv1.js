@@ -52,7 +52,7 @@ routerv1reservas.get('/',
     passport.authenticate('jwt',
     { session: false }),
     auditLoggerMiddleware,
-    esRol(2, 3),
+    esRol(1,2, 3),
     controladoresReservas.mostrarReservas);
 
 /**

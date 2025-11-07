@@ -1,6 +1,7 @@
 import * as servicioReservas from '../../services/servicio_reservas.js';
 import { deleteImage } from '../../utils/fileutils.js';
 
+
 export async function mostrarReservas(req, res, next) {
     const {
         inactivos,
@@ -12,15 +13,18 @@ export async function mostrarReservas(req, res, next) {
 
     const estado = inactivos !== undefined ? 0 : 1;
     const offset = (page - 1) * limit;
-    const esDesc = desc !== undefined;
+    const esDesc = desc !== undefined; // <-- La variable booleana
+
+    const usuarioAutenticado = req.user; 
 
     try {
         const reservas = await servicioReservas.fetchReservas(
             estado,
             ordenar,
-            esDesc,
+            esDesc, // Enviamos el booleano 'esDesc' en 3er lugar
             parseInt(limit),
-            offset
+            offset,
+            usuarioAutenticado // Enviamos el usuario al final
         );
         res.json(reservas);
     } catch (error) {
