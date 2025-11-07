@@ -1,18 +1,40 @@
 import { pool } from '../config/db.js';
 
-export async function reservasConFiltro(activo, ordenar, desc, limit, offset) {
-    let query = 'SELECT * FROM reservas WHERE activo = ?';
-    const params = [activo];
 
-    const columnasValidas = ['reserva_id','salon_id', 'usuario_id', 'importe_salon', 'fecha_reserva', 'creado', 'importe_total'];
-    if (ordenar && columnasValidas.includes(ordenar)) {
-        query += ` ORDER BY ${ordenar}`;
-        if (desc) query += ' DESC';
+
+export async function reservasConFiltro(activo, ordenar, limit, offset, esDesc, usuarioIdFiltro = null) {
+    
+    let query = 'SELECT * FROM reservas WHERE 1=1';
+    let params = [];
+
+    // 1. FILTRO DE SEGURIDAD
+    if (usuarioIdFiltro !== null) {
+        query += ' AND usuario_id = ?';
+        params.push(usuarioIdFiltro);
     }
 
-    query += ' LIMIT ? OFFSET ?';
-    params.push(limit, offset);
+    // 2. FILTRO DE ESTADO
+    if (activo !== undefined) {
+        query += ' AND activo = ?';
+        params.push(activo);
+    }
+    
+    // 3. ORDENAMIENTO (Usa la variable booleana 'esDesc' recibida)
+    const columnaOrdenar = ordenar || 'reserva_id';
+    const direccion = esDesc ? 'DESC' : 'ASC'; 
 
+    const columnasValidas = ['reserva_id','salon_id', 'usuario_id', 'importe_salon', 'fecha_reserva', 'creado', 'importe_total'];
+        
+    if (columnasValidas.includes(columnaOrdenar)) {
+        query += ` ORDER BY ${columnaOrdenar} ${direccion}`;
+    } else {
+        query += ` ORDER BY reserva_id ${direccion}`;
+    }
+
+    // 4. PAGINACIÓN
+    query += ' LIMIT ? OFFSET ?';
+    params.push(parseInt(limit), offset);
+    
     const [rows] = await pool.query(query, params);
     return rows;
 }

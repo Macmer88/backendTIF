@@ -7,9 +7,28 @@ import createError from 'http-errors';
 import { enviarNotificacionReserva } from './servicio_notificaciones.js';
 import { usuariosPorId } from '../databases/modelo_usuarios.js';
 
-export async function fetchReservas(activo,ordenar,desc,limit,offset) {
-    return await modeloReservas.reservasConFiltro(activo,ordenar,desc,limit,offset);
+
+export async function fetchReservas(activo, ordenar, esDesc, limit, offset, usuarioAutenticado) { 
+
+    const esCliente = usuarioAutenticado.tipo_usuario === 1;
+    let usuarioIdFiltro = null;
+
+    if (esCliente) {
+        usuarioIdFiltro = usuarioAutenticado.usuario_id;
+    }
+
+    // El servicio llama al DAO con los 6 parámetros en el orden esperado
+    return await modeloReservas.reservasConFiltro(
+        activo, 
+        ordenar, 
+        limit, 
+        offset, 
+        esDesc, // Enviamos el booleano 'esDesc'
+        usuarioIdFiltro
+    );
 }
+
+
 
 export async function reservasById(id, usuarioAutenticado){
     const reserva = await modeloReservas.reservasPorId(id);

@@ -8,6 +8,7 @@ import routerv1servicios from './src/routes/ver1/routes_servicios.js';
 import routerv1turnos from './src/routes/ver1/routes_turnos.js';
 import routerv1auth from './src/routes/ver1/routes_auth.js';
 import routerv1reportes from './src/routes/ver1/routes_reportes.js';
+import routerv1stats from './src/routes/ver1/routes_stats.js';
 import routerv1dashboard from './src/routes/ver1/routes_dashboard.js';
 import corsMiddleware from './src/midlewares/global/corsconfig.js';
 import passport from 'passport';
@@ -40,6 +41,7 @@ app.use('/api/ver1/servicios', routerv1servicios);
 app.use('/api/ver1/turnos', routerv1turnos);
 app.use('/api/ver1/auth', routerv1auth);
 app.use('/api/ver1/reportes', routerv1reportes);
+app.use('/api/ver1/stats', routerv1stats);
 app.use('/dashboard', routerv1dashboard);
 
 app.use('/api/ver2/salones', routerv2salones);
